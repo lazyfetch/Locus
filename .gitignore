@@ -1,0 +1,50 @@
+idea.md
+
+# Lucene index directories 
+index/
+indexDir/
+
+# VS Code settings
+.vscode/
+
+# Compiled output
+target/
+build/
+*.class
+*.jar
+*.war
+*.ear
+
+# IDE files – generic
+.idea/
+*.iml
+*.ipr
+*.iws
+.settings/
+.project
+.classpath
+.factorypath
+.springBeans
+.sts4-cache
+.apt_generated
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# Maven wrapper output (not the wrapper itself)
+.mvn/wrapper/maven-wrapper.jar
+
+# OS files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Logs / temp
+*.log
+*.tmp
+*.swp
