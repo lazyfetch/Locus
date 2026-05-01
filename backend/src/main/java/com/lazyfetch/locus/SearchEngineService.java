@@ -1,10 +1,10 @@
 package com.lazyfetch.locus;
 
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.*;
 import org.apache.lucene.index.*;
 import org.apache.lucene.search.*;
-import org.apache.lucene.queryparser.classic.QueryParser;  
+import org.apache.lucene.queryparser.simple.SimpleQueryParser;
 import org.apache.lucene.store.*;
 import org.springframework.stereotype.Service;
 
@@ -12,16 +12,18 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.*;
 
+import com.lazyfetch.locus.Filters.CustomAnalyzer;
+
 @Service
 public class SearchEngineService {
 
     private final Directory indexDirectory;
-    private final StandardAnalyzer analyzer;
+    private final Analyzer analyzer;
 
     public SearchEngineService() throws IOException {
         // Store index on disk in a folder called "index"
         this.indexDirectory = FSDirectory.open(Paths.get("index"));
-        this.analyzer = new StandardAnalyzer();
+        this.analyzer = new CustomAnalyzer();
     }
 
     // Add a document to the index
@@ -43,7 +45,7 @@ public class SearchEngineService {
         try (DirectoryReader reader = DirectoryReader.open(indexDirectory)) 
         {
             IndexSearcher searcher = new IndexSearcher(reader);
-            QueryParser parser = new QueryParser("body", analyzer);
+            SimpleQueryParser parser = new SimpleQueryParser(analyzer,"body");
             Query query = parser.parse(queryText);
 
             TopDocs topDocs = searcher.search(query, maxHits);
