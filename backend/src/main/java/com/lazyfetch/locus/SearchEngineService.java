@@ -10,12 +10,14 @@ import java.util.Map;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.document.KnnFloatVectorField;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.index.VectorSimilarityFunction;
 import org.apache.lucene.queryparser.simple.SimpleQueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
@@ -32,22 +34,42 @@ public class SearchEngineService {
 
     private final Directory indexDirectory;
     private final Analyzer analyzer;
+    private final EmbeddingService embeddingService;
+    
+    public Directory getIndexDirectory() { return indexDirectory; }
 
-    public SearchEngineService() throws IOException 
+
+    public SearchEngineService(EmbeddingService embeddingService) throws IOException 
     {
         // Store index on disk in a folder called "index"
         this.indexDirectory = FSDirectory.open(Paths.get("index"));
         this.analyzer = new CustomAnalyzer();
+        this.embeddingService = embeddingService;
     }
 
     // Add a document to the index
     public void indexDocument(String title, String body) throws IOException 
     {
         IndexWriterConfig config = new IndexWriterConfig(analyzer);
-        try (IndexWriter writer = new IndexWriter(indexDirectory, config)) {
+        try (IndexWriter writer = new IndexWriter(indexDirectory, config)) 
+        {
             Document doc = new Document();
-            doc.add(new TextField("title", title, Field.Store.YES));  // stored + indexed
-            doc.add(new TextField("body", body, Field.Store.YES));    // stored + indexed
+            doc.add(new TextField("title", title, Field.Store.YES));
+            doc.add(new TextField("body", body, Field.Store.YES));
+
+            // Compute embedding
+            float[] vector;
+            try 
+            {
+                vector = embeddingService.embed(title + " " + body);
+            } 
+            catch (Exception e) 
+            {
+                throw new IOException("Embedding failed", e);
+            }
+
+            doc.add(new KnnFloatVectorField("embedding", vector, VectorSimilarityFunction.COSINE));
+
             writer.addDocument(doc);
             writer.commit();
         }
