@@ -55,13 +55,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- ONNX Runtime -->
-        <dependency>
-            <groupId>com.microsoft.onnxruntime</groupId>
-            <artifactId>onnxruntime</artifactId>
-            <version>${onnxruntime.version}</version>
-        </dependency>
-
         <!-- Lucene -->
         <dependency>
             <groupId>org.apache.lucene</groupId>
@@ -77,6 +70,20 @@
             <groupId>org.apache.lucene</groupId>
             <artifactId>lucene-queryparser</artifactId>
             <version>9.11.0</version>
+        </dependency>
+
+        <!-- ONNX Runtime -->
+        <dependency>
+            <groupId>com.microsoft.onnxruntime</groupId>
+            <artifactId>onnxruntime</artifactId>
+            <version>1.17.1</version>
+        </dependency>
+
+        <!--  DJL tokenizers -->
+        <dependency>
+            <groupId>ai.djl.huggingface</groupId>
+            <artifactId>tokenizers</artifactId>
+            <version>0.34.0</version>
         </dependency>
     </dependencies>
 
