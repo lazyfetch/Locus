@@ -12,15 +12,14 @@ import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 
 import com.lazyfetch.locus.Filters.CustomAnalyzer;
+
 @RestController
 public class SearchController {
 
     private final SearchEngineService searchEngine;
     private final HybridSearchService hybridSearchService;
 
-
-    public SearchController(SearchEngineService searchEngine, HybridSearchService hybridSearchService) 
-    {
+    public SearchController(SearchEngineService searchEngine, HybridSearchService hybridSearchService) {
         this.searchEngine = searchEngine;
         this.hybridSearchService = hybridSearchService;
     }
@@ -41,11 +40,8 @@ public class SearchController {
         return searchEngine.search(q, n);
     }
 
-   
-
     @GetMapping("/debug-tokens")
-    public Map<String, List<String>> debugTokens(@RequestParam String text) throws Exception 
-    {
+    public Map<String, List<String>> debugTokens(@RequestParam String text) throws Exception {
         Map<String, List<String>> result = new HashMap<>();
 
         List<String> standardTokens = getTokens(new StandardAnalyzer(), text);
@@ -58,23 +54,19 @@ public class SearchController {
     }
 
     @PostMapping("/hybrid-search")
-    public List<Map<String, String>> hybridSearch(@RequestBody Map<String, Object> body) throws Exception 
-    {
+    public HybridSearchResponse hybridSearch(@RequestBody Map<String, Object> body) throws Exception {
         String query = (String) body.get("query");
         int topK = body.containsKey("topK") ? (int) body.get("topK") : 5;
         double alpha = body.containsKey("alpha") ? ((Number) body.get("alpha")).doubleValue() : 0.5;
         return hybridSearchService.hybridSearch(query, topK, alpha);
     }
 
-    private List<String> getTokens(Analyzer analyzer, String text) throws Exception 
-    {
+    private List<String> getTokens(Analyzer analyzer, String text) throws Exception {
         List<String> tokens = new ArrayList<>();
-        try (TokenStream stream = analyzer.tokenStream("body", text)) 
-        {
+        try (TokenStream stream = analyzer.tokenStream("body", text)) {
             CharTermAttribute attr = stream.addAttribute(CharTermAttribute.class);
             stream.reset();
-            while (stream.incrementToken()) 
-            {
+            while (stream.incrementToken()) {
                 tokens.add(attr.toString());
             }
             stream.end();
