@@ -60,4 +60,8 @@ public class StructuredDataService {
             "%" + namePattern + "%"
         );
     }
+
+    public List<Map<String, Object>> listCompanies() {
+        return jdbc.queryForList("SELECT ticker, name FROM company");
+    }
 }

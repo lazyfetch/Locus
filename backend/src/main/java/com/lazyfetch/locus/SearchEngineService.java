@@ -19,9 +19,13 @@ import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.index.VectorSimilarityFunction;
 import org.apache.lucene.queryparser.simple.SimpleQueryParser;
+import org.apache.lucene.search.BoostQuery;
+import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
@@ -35,80 +39,103 @@ public class SearchEngineService {
     private final Directory indexDirectory;
     private final Analyzer analyzer;
     private final EmbeddingService embeddingService;
-    
+    private final TickerTagger tickerTagger;
+
     public Directory getIndexDirectory() { return indexDirectory; }
 
-
-    public SearchEngineService(EmbeddingService embeddingService) throws IOException 
-    {
-        // Store index on disk in a folder called "index"
+    public SearchEngineService(EmbeddingService embeddingService, TickerTagger tickerTagger) throws IOException {
         this.indexDirectory = FSDirectory.open(Paths.get("index"));
         this.analyzer = new CustomAnalyzer();
         this.embeddingService = embeddingService;
+        this.tickerTagger = tickerTagger;
     }
 
-    // Add a document to the index
-    public void indexDocument(String title, String body) throws IOException 
-    {
+    public void indexDocument(String title, String body, List<String> tickers) throws IOException {
         IndexWriterConfig config = new IndexWriterConfig(analyzer);
-        try (IndexWriter writer = new IndexWriter(indexDirectory, config)) 
-        {
+        try (IndexWriter writer = new IndexWriter(indexDirectory, config)) {
             Document doc = new Document();
             doc.add(new TextField("title", title, Field.Store.YES));
             doc.add(new TextField("body", body, Field.Store.YES));
 
-            // Compute embedding
+            List<String> resolvedTickers = tickers;
+            if (resolvedTickers == null || resolvedTickers.isEmpty()) {
+                resolvedTickers = tickerTagger.extractTickers(title + " " + body);
+            }
+            if (resolvedTickers != null) {
+                for (String t : resolvedTickers) {
+                    if (t != null && !t.isBlank()) {
+                        doc.add(new StringField("ticker", t.toUpperCase(), Field.Store.YES));
+                    }
+                }
+            }
+
             float[] vector;
-            try 
-            {
+            try {
                 vector = embeddingService.embed(title + " " + body);
-            } 
-            catch (Exception e) 
-            {
+            } catch (Exception e) {
                 throw new IOException("Embedding failed", e);
             }
 
             doc.add(new KnnFloatVectorField("embedding", vector, VectorSimilarityFunction.COSINE));
-
             writer.addDocument(doc);
             writer.commit();
         }
     }
 
-    // Search the index
     public List<Map<String, String>> search(String queryText, int maxHits) throws Exception {
+        return search(queryText, maxHits, null);
+    }
+
+    public List<Map<String, String>> search(String queryText, int maxHits, String ticker) throws Exception {
         List<Map<String, String>> results = new ArrayList<>();
 
-        try (DirectoryReader reader = DirectoryReader.open(indexDirectory)) 
-        {
+        try (DirectoryReader reader = DirectoryReader.open(indexDirectory)) {
             IndexSearcher searcher = new IndexSearcher(reader);
-            SimpleQueryParser parser = new SimpleQueryParser(analyzer,"body");
-            Query query = parser.parse(queryText);
+            SimpleQueryParser parser = new SimpleQueryParser(analyzer, "body");
+            Query textQuery = parser.parse(queryText);
 
-            TopDocs topDocs = searcher.search(query, maxHits);
+            TopDocs topDocs;
 
-            for (ScoreDoc scoreDoc : topDocs.scoreDocs) 
-            {
+            if (ticker != null && !ticker.isBlank()) {
+                Query tickerQuery = new TermQuery(new Term("ticker", ticker.toUpperCase()));
+
+                BooleanQuery.Builder filtered = new BooleanQuery.Builder();
+                filtered.add(textQuery, BooleanClause.Occur.MUST);
+                filtered.add(tickerQuery, BooleanClause.Occur.FILTER);
+
+                topDocs = searcher.search(filtered.build(), maxHits);
+
+                if (topDocs.scoreDocs.length == 0) {
+                    BooleanQuery.Builder boosted = new BooleanQuery.Builder();
+                    boosted.add(textQuery, BooleanClause.Occur.MUST);
+                    boosted.add(new BoostQuery(tickerQuery, 4.0f), BooleanClause.Occur.SHOULD);
+                    topDocs = searcher.search(boosted.build(), maxHits);
+                }
+            } else {
+                topDocs = searcher.search(textQuery, maxHits);
+            }
+
+            for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
                 Document doc = searcher.doc(scoreDoc.doc);
                 Map<String, String> result = new HashMap<>();
                 result.put("title", doc.get("title"));
                 result.put("body", doc.get("body"));
                 result.put("score", String.valueOf(scoreDoc.score));
+                String docTicker = doc.get("ticker");
+                if (docTicker != null) {
+                    result.put("ticker", docTicker);
+                }
                 results.add(result);
             }
         }
         return results;
     }
 
-
-    // Update an existing document by id 
-    public void updateDocument(String id, String title, String body) throws IOException 
-    {
+    public void updateDocument(String id, String title, String body) throws IOException {
         IndexWriterConfig config = new IndexWriterConfig(analyzer);
-        try (IndexWriter writer = new IndexWriter(indexDirectory, config)) 
-        {
+        try (IndexWriter writer = new IndexWriter(indexDirectory, config)) {
             Document doc = new Document();
-            doc.add(new StringField("id", id, Field.Store.YES));   
+            doc.add(new StringField("id", id, Field.Store.YES));
             doc.add(new TextField("title", title, Field.Store.YES));
             doc.add(new TextField("body", body, Field.Store.YES));
             writer.updateDocument(new Term("id", id), doc);
@@ -116,12 +143,9 @@ public class SearchEngineService {
         }
     }
 
-    // Delete a document by id
-    public void deleteDocument(String id) throws IOException 
-    {
+    public void deleteDocument(String id) throws IOException {
         IndexWriterConfig config = new IndexWriterConfig(analyzer);
-        try (IndexWriter writer = new IndexWriter(indexDirectory, config)) 
-        {
+        try (IndexWriter writer = new IndexWriter(indexDirectory, config)) {
             writer.deleteDocuments(new Term("id", id));
             writer.commit();
         }

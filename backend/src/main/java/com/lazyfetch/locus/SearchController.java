@@ -25,11 +25,29 @@ public class SearchController {
     }
 
     @PostMapping("/index")
-    public String index(@RequestBody Map<String, String> body) throws Exception {
-        searchEngine.indexDocument(
-            body.get("title"),
-            body.get("body")
-        );
+    public String index(@RequestBody Map<String, Object> body) throws Exception {
+        String title = (String) body.get("title");
+        String docBody = (String) body.get("body");
+
+        List<String> tickers = new ArrayList<>();
+        Object tickerValue = body.get("ticker");
+        if (tickerValue instanceof String && !((String) tickerValue).isBlank()) {
+            tickers.add(((String) tickerValue).toUpperCase());
+        }
+
+        Object tickersValue = body.get("tickers");
+        if (tickersValue instanceof List<?>) {
+            for (Object t : (List<?>) tickersValue) {
+                if (t != null) {
+                    String s = t.toString().trim();
+                    if (!s.isEmpty()) {
+                        tickers.add(s.toUpperCase());
+                    }
+                }
+            }
+        }
+
+        searchEngine.indexDocument(title, docBody, tickers);
         return "Indexed successfully!";
     }
 

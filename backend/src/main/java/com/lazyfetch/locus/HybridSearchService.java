@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,10 +31,11 @@ public class HybridSearchService {
 
     public HybridSearchResponse hybridSearch(String query, int topK, double alpha) throws Exception {
         RetrievalPlan plan = queryPlanner.plan(query);
+        String ticker = plan.getTicker();
 
         var textFuture = CompletableFuture.supplyAsync(() -> {
             try {
-                return textSearchService.search(query, topK * 2);
+                return textSearchService.search(query, topK * 2, ticker);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -43,7 +43,7 @@ public class HybridSearchService {
 
         var vectorFuture = CompletableFuture.supplyAsync(() -> {
             try {
-                return vectorSearchService.vectorSearch(query, topK * 2);
+                return vectorSearchService.vectorSearch(query, topK * 2, ticker);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -51,9 +51,9 @@ public class HybridSearchService {
 
         CompletableFuture<List<Map<String, Object>>> structuredFuture =
             CompletableFuture.supplyAsync(() -> {
-                if (plan.getTicker() != null) {
+                if (ticker != null) {
                     return structuredDataService.queryMetrics(
-                        plan.getTicker(),
+                        ticker,
                         plan.getMetrics(),
                         plan.getStartDate(),
                         plan.getEndDate()
@@ -66,27 +66,12 @@ public class HybridSearchService {
         List<Map<String, String>> vectorResults = vectorFuture.get();
         List<Map<String, Object>> structuredRows = structuredFuture.get();
 
-        Map<String, Double> fusedScores = new HashMap<>();
-
-        BiConsumer<List<Map<String, String>>, Double> addRrf = (list, weight) -> {
-            int rank = 1;
-            for (Map<String, String> doc : list) {
-                String key = doc.get("title") + "|" + doc.get("body");
-                fusedScores.merge(key, weight / (60 + rank), Double::sum);
-                rank++;
-            }
-        };
-
+        final Map<String, Double> fusedScores = new HashMap<>();
         double textWeight = alpha * 0.5;
         double vectorWeight = alpha * 0.5;
 
-        addRrf.accept(textResults, textWeight);
-        addRrf.accept(vectorResults, vectorWeight);
-
-        List<Map.Entry<String, Double>> sorted = fusedScores.entrySet().stream()
-                .sorted(Map.Entry.<String, Double>comparingByValue().reversed())
-                .limit(topK)
-                .collect(Collectors.toList());
+        addRrf(fusedScores, textResults, textWeight);
+        addRrf(fusedScores, vectorResults, vectorWeight);
 
         Map<String, Map<String, String>> allDocs = new HashMap<>();
         for (Map<String, String> doc : textResults) {
@@ -96,8 +81,44 @@ public class HybridSearchService {
             allDocs.put(doc.get("title") + "|" + doc.get("body"), doc);
         }
 
+        if (ticker != null && !ticker.isBlank()) {
+            Map<String, Double> snapshot = new HashMap<>(fusedScores);
+            for (Map.Entry<String, Double> entry : snapshot.entrySet()) {
+                Map<String, String> doc = allDocs.get(entry.getKey());
+                double score = entry.getValue();
+                if (doc != null) {
+                    String docTicker = doc.get("ticker");
+                    if (docTicker != null && docTicker.equalsIgnoreCase(ticker)) {
+                        score = score * 1.5;
+                    }
+                }
+                fusedScores.put(entry.getKey(), score);
+            }
+        }
+
+        List<Map.Entry<String, Double>> sorted = fusedScores.entrySet().stream()
+                .sorted(Map.Entry.<String, Double>comparingByValue().reversed())
+                .collect(Collectors.toList());
+
+        int maxUnstructured = Math.min(topK, 3);
+        if (plan.getMetrics() != null && !plan.getMetrics().isEmpty()) {
+            maxUnstructured = Math.min(maxUnstructured, 2);
+        }
+
+        double minScore = 0.0;
+        if (!sorted.isEmpty()) {
+            double topScore = sorted.get(0).getValue();
+            minScore = topScore * 0.60;
+        }
+
         List<Map<String, String>> unstructuredResults = new ArrayList<>();
         for (Map.Entry<String, Double> entry : sorted) {
+            if (unstructuredResults.size() >= maxUnstructured) {
+                break;
+            }
+            if (entry.getValue() < minScore) {
+                continue;
+            }
             Map<String, String> doc = allDocs.get(entry.getKey());
             if (doc != null) {
                 doc.put("score", String.format("%.4f", entry.getValue()));
@@ -105,6 +126,23 @@ public class HybridSearchService {
             }
         }
 
+        if (unstructuredResults.isEmpty() && !sorted.isEmpty()) {
+            Map<String, String> doc = allDocs.get(sorted.get(0).getKey());
+            if (doc != null) {
+                doc.put("score", String.format("%.4f", sorted.get(0).getValue()));
+                unstructuredResults.add(doc);
+            }
+        }
+
         return new HybridSearchResponse(unstructuredResults, structuredRows);
+    }
+
+    private void addRrf(Map<String, Double> fusedScores, List<Map<String, String>> list, double weight) {
+        int rank = 1;
+        for (Map<String, String> doc : list) {
+            String key = doc.get("title") + "|" + doc.get("body");
+            fusedScores.merge(key, weight / (60 + rank), Double::sum);
+            rank++;
+        }
     }
 }
