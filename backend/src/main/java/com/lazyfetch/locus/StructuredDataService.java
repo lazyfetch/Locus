@@ -54,6 +54,55 @@ public class StructuredDataService {
         return jdbc.queryForList(sql.toString(), params.toArray());
     }
 
+    public List<Map<String, Object>> queryMetricsForTickers(
+            List<String> tickers,
+            List<String> metrics,
+            LocalDate startDate,
+            LocalDate endDate) {
+
+        if (tickers == null || tickers.isEmpty()) {
+            return List.of();
+        }
+
+        StringBuilder sql = new StringBuilder(
+            "SELECT ticker, metric, metric_value, date FROM fundamental WHERE ticker IN ("
+        );
+        List<Object> params = new ArrayList<>();
+
+        for (int i = 0; i < tickers.size(); i++) {
+            if (i > 0) {
+                sql.append(", ");
+            }
+            sql.append("?");
+            params.add(tickers.get(i));
+        }
+        sql.append(")");
+
+        if (metrics != null && !metrics.isEmpty()) {
+            sql.append(" AND LOWER(metric) IN (");
+            for (int i = 0; i < metrics.size(); i++) {
+                if (i > 0) {
+                    sql.append(", ");
+                }
+                sql.append("?");
+                params.add(metrics.get(i).toLowerCase());
+            }
+            sql.append(")");
+        }
+
+        if (startDate != null) {
+            sql.append(" AND date >= ?");
+            params.add(startDate);
+        }
+        if (endDate != null) {
+            sql.append(" AND date <= ?");
+            params.add(endDate);
+        }
+
+        sql.append(" ORDER BY date DESC");
+        return jdbc.queryForList(sql.toString(), params.toArray());
+    }
+
     public List<Map<String, Object>> searchCompanies(String namePattern) {
         return jdbc.queryForList(
             "SELECT * FROM company WHERE name LIKE ?",

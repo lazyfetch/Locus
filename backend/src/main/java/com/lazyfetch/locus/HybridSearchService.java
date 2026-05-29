@@ -31,11 +31,11 @@ public class HybridSearchService {
 
     public HybridSearchResponse hybridSearch(String query, int topK, double alpha) throws Exception {
         RetrievalPlan plan = queryPlanner.plan(query);
-        String ticker = plan.getTicker();
+        List<String> tickers = plan.getTickers();
 
         var textFuture = CompletableFuture.supplyAsync(() -> {
             try {
-                return textSearchService.search(query, topK * 2, ticker);
+                return textSearchService.search(query, topK * 2, tickers);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -43,7 +43,7 @@ public class HybridSearchService {
 
         var vectorFuture = CompletableFuture.supplyAsync(() -> {
             try {
-                return vectorSearchService.vectorSearch(query, topK * 2, ticker);
+                return vectorSearchService.vectorSearch(query, topK * 2, tickers);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -51,9 +51,9 @@ public class HybridSearchService {
 
         CompletableFuture<List<Map<String, Object>>> structuredFuture =
             CompletableFuture.supplyAsync(() -> {
-                if (ticker != null) {
-                    return structuredDataService.queryMetrics(
-                        ticker,
+                if (tickers != null && !tickers.isEmpty()) {
+                    return structuredDataService.queryMetricsForTickers(
+                        tickers,
                         plan.getMetrics(),
                         plan.getStartDate(),
                         plan.getEndDate()
@@ -67,8 +67,8 @@ public class HybridSearchService {
         List<Map<String, Object>> structuredRows = structuredFuture.get();
 
         final Map<String, Double> fusedScores = new HashMap<>();
-        double textWeight = alpha * 0.5;
-        double vectorWeight = alpha * 0.5;
+        double textWeight = alpha;
+        double vectorWeight = 1 - alpha;
 
         addRrf(fusedScores, textResults, textWeight);
         addRrf(fusedScores, vectorResults, vectorWeight);
@@ -79,21 +79,6 @@ public class HybridSearchService {
         }
         for (Map<String, String> doc : vectorResults) {
             allDocs.put(doc.get("title") + "|" + doc.get("body"), doc);
-        }
-
-        if (ticker != null && !ticker.isBlank()) {
-            Map<String, Double> snapshot = new HashMap<>(fusedScores);
-            for (Map.Entry<String, Double> entry : snapshot.entrySet()) {
-                Map<String, String> doc = allDocs.get(entry.getKey());
-                double score = entry.getValue();
-                if (doc != null) {
-                    String docTicker = doc.get("ticker");
-                    if (docTicker != null && docTicker.equalsIgnoreCase(ticker)) {
-                        score = score * 1.5;
-                    }
-                }
-                fusedScores.put(entry.getKey(), score);
-            }
         }
 
         List<Map.Entry<String, Double>> sorted = fusedScores.entrySet().stream()

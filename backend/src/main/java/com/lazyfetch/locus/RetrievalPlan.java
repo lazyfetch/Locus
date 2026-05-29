@@ -11,4 +11,5 @@ public class RetrievalPlan {
     private List<String> metrics;
     private LocalDate startDate;
     private LocalDate endDate;
+    private List<String> tickers;
 }

@@ -39,7 +39,8 @@ public class TickerTagger {
 
         try {
             List<Map<String, Object>> companies = structuredDataService.listCompanies();
-            for (Map<String, Object> row : companies) {
+            for (Map<String, Object> row : companies) 
+            {
                 String ticker = row.get("ticker") != null ? row.get("ticker").toString().toUpperCase() : null;
                 String name = row.get("name") != null ? row.get("name").toString().toLowerCase() : null;
 

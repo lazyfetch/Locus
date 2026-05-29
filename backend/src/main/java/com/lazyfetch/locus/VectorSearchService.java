@@ -3,6 +3,8 @@ package com.lazyfetch.locus;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.KnnFloatVectorQuery;
 import org.apache.lucene.search.Query;
@@ -28,20 +30,23 @@ public class VectorSearchService {
     }
 
     public List<Map<String, String>> vectorSearch(String queryText, int maxHits) throws Exception {
-        return vectorSearch(queryText, maxHits, null);
+        return vectorSearch(queryText, maxHits, (List<String>) null);
     }
 
     public List<Map<String, String>> vectorSearch(String queryText, int maxHits, String ticker) throws Exception {
+        if (ticker == null || ticker.isBlank()) {
+            return vectorSearch(queryText, maxHits, (List<String>) null);
+        }
+        return vectorSearch(queryText, maxHits, List.of(ticker));
+    }
+
+    public List<Map<String, String>> vectorSearch(String queryText, int maxHits, List<String> tickers) throws Exception {
         float[] queryVector = embeddingService.embed(queryText);
 
         try (DirectoryReader reader = DirectoryReader.open(searchEngineService.getIndexDirectory())) {
             IndexSearcher searcher = new IndexSearcher(reader);
 
-            Query filter = null;
-            if (ticker != null && !ticker.isBlank()) {
-                filter = new TermQuery(new Term("ticker", ticker.toUpperCase()));
-            }
-
+            Query filter = buildTickerFilter(tickers);
             KnnFloatVectorQuery knnQuery = new KnnFloatVectorQuery("embedding", queryVector, maxHits, filter);
             TopDocs topDocs = searcher.search(knnQuery, maxHits);
 
@@ -65,5 +70,19 @@ public class VectorSearchService {
             }
             return results;
         }
+    }
+
+    private Query buildTickerFilter(List<String> tickers) {
+        if (tickers == null || tickers.isEmpty()) {
+            return null;
+        }
+        BooleanQuery.Builder b = new BooleanQuery.Builder();
+        for (String t : tickers) {
+            if (t != null && !t.isBlank()) {
+                b.add(new TermQuery(new Term("ticker", t.toUpperCase())), BooleanClause.Occur.SHOULD);
+            }
+        }
+        b.setMinimumNumberShouldMatch(1);
+        return b.build();
     }
 }

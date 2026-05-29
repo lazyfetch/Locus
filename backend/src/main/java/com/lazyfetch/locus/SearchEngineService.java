@@ -19,7 +19,6 @@ import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.index.VectorSimilarityFunction;
 import org.apache.lucene.queryparser.simple.SimpleQueryParser;
-import org.apache.lucene.search.BoostQuery;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.IndexSearcher;
@@ -83,10 +82,17 @@ public class SearchEngineService {
     }
 
     public List<Map<String, String>> search(String queryText, int maxHits) throws Exception {
-        return search(queryText, maxHits, null);
+        return search(queryText, maxHits, (List<String>) null);
     }
 
     public List<Map<String, String>> search(String queryText, int maxHits, String ticker) throws Exception {
+        if (ticker == null || ticker.isBlank()) {
+            return search(queryText, maxHits, (List<String>) null);
+        }
+        return search(queryText, maxHits, List.of(ticker));
+    }
+
+    public List<Map<String, String>> search(String queryText, int maxHits, List<String> tickers) throws Exception {
         List<Map<String, String>> results = new ArrayList<>();
 
         try (DirectoryReader reader = DirectoryReader.open(indexDirectory)) {
@@ -94,22 +100,18 @@ public class SearchEngineService {
             SimpleQueryParser parser = new SimpleQueryParser(analyzer, "body");
             Query textQuery = parser.parse(queryText);
 
+            Query tickerFilter = buildTickerFilter(tickers);
             TopDocs topDocs;
 
-            if (ticker != null && !ticker.isBlank()) {
-                Query tickerQuery = new TermQuery(new Term("ticker", ticker.toUpperCase()));
-
+            if (tickerFilter != null) {
                 BooleanQuery.Builder filtered = new BooleanQuery.Builder();
                 filtered.add(textQuery, BooleanClause.Occur.MUST);
-                filtered.add(tickerQuery, BooleanClause.Occur.FILTER);
+                filtered.add(tickerFilter, BooleanClause.Occur.FILTER);
 
                 topDocs = searcher.search(filtered.build(), maxHits);
 
                 if (topDocs.scoreDocs.length == 0) {
-                    BooleanQuery.Builder boosted = new BooleanQuery.Builder();
-                    boosted.add(textQuery, BooleanClause.Occur.MUST);
-                    boosted.add(new BoostQuery(tickerQuery, 4.0f), BooleanClause.Occur.SHOULD);
-                    topDocs = searcher.search(boosted.build(), maxHits);
+                    topDocs = searcher.search(textQuery, maxHits);
                 }
             } else {
                 topDocs = searcher.search(textQuery, maxHits);
@@ -129,6 +131,20 @@ public class SearchEngineService {
             }
         }
         return results;
+    }
+
+    private Query buildTickerFilter(List<String> tickers) {
+        if (tickers == null || tickers.isEmpty()) {
+            return null;
+        }
+        BooleanQuery.Builder b = new BooleanQuery.Builder();
+        for (String t : tickers) {
+            if (t != null && !t.isBlank()) {
+                b.add(new TermQuery(new Term("ticker", t.toUpperCase())), BooleanClause.Occur.SHOULD);
+            }
+        }
+        b.setMinimumNumberShouldMatch(1);
+        return b.build();
     }
 
     public void updateDocument(String id, String title, String body) throws IOException {
