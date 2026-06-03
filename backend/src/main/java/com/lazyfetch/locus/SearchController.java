@@ -31,13 +31,14 @@ public class SearchController {
 
         List<String> tickers = new ArrayList<>();
         Object tickerValue = body.get("ticker");
-        if (tickerValue instanceof String && !((String) tickerValue).isBlank()) {
+        if (tickerValue instanceof String && !((String) tickerValue).isBlank()) 
+        {
             tickers.add(((String) tickerValue).toUpperCase());
         }
 
         Object tickersValue = body.get("tickers");
-        if (tickersValue instanceof List<?>) {
-            for (Object t : (List<?>) tickersValue) {
+        if (tickersValue instanceof List<?> list) {
+            for (Object t : list) {
                 if (t != null) {
                     String s = t.toString().trim();
                     if (!s.isEmpty()) {

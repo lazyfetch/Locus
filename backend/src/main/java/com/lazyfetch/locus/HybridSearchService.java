@@ -33,6 +33,8 @@ public class HybridSearchService {
         RetrievalPlan plan = queryPlanner.plan(query);
         List<String> tickers = plan.getTickers();
 
+        
+
         var textFuture = CompletableFuture.supplyAsync(() -> {
             try {
                 return textSearchService.search(query, topK * 2, tickers);

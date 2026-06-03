@@ -13,12 +13,11 @@ import java.util.regex.Pattern;
 @Service
 public class QueryPlanner {
     private static final Pattern TICKER_PATTERN = Pattern.compile("\\b[A-Z]{1,5}\\b");
-    private static final Set<String> KNOWN_TICKERS = Set.of("TSLA", "F", "AAPL");
+    private static final Set<String> KNOWN_TICKERS = Set.of("TSLA", "F", "AAPL");   // fallback if DB empty
     private final TickerTagger tickerTagger;
 
     private static final Pattern METRIC_PATTERN = Pattern.compile(
-        "(?i)\\b(P/E|PE|revenue|profit|ratio|earnings|eps|market cap)\\b"
-    );
+            "(?i)\\b(P/E|PE|revenue|profit|ratio|earnings|eps|market cap)\\b");
 
     private final StructuredDataService structuredDataService;
 
@@ -31,35 +30,43 @@ public class QueryPlanner {
         RetrievalPlan plan = new RetrievalPlan();
         plan.setTextQuery(rawQuery);
 
+        //  1. Try TickerTagger (the best source)
         List<String> tickers = tickerTagger.extractTickers(rawQuery);
-        plan.setTickers(tickers);
 
-        if (tickers != null && !tickers.isEmpty()) {
-            plan.setTicker(tickers.get(0));
-        } else {
+        // 2. Fallback: regex ticker + per‑word company database search
+        if (tickers.isEmpty()) {
+            List<String> fallbackTickers = new ArrayList<>();
+
+            // 2a. known tickers via regex
             Matcher tickerMatcher = TICKER_PATTERN.matcher(rawQuery);
             if (tickerMatcher.find()) {
                 String candidate = tickerMatcher.group();
                 if (KNOWN_TICKERS.contains(candidate)) {
-                    plan.setTicker(candidate);
+                    fallbackTickers.add(candidate);
                 }
             }
 
-            if (plan.getTicker() == null) {
-                String[] words = rawQuery.split("\\s+");
-                for (String word : words) {
-                    if (word.length() > 1 && Character.isUpperCase(word.charAt(0))) {
-                        List<Map<String, Object>> companies = structuredDataService.searchCompanies(word);
-                        if (!companies.isEmpty()) {
-                            String ticker = (String) companies.get(0).get("ticker");
-                            plan.setTicker(ticker);
-                            break;
+            // 2b. per‑word company name lookup (collect ALL matches)
+            String[] words = rawQuery.split("\\s+");
+            for (String word : words) {
+                if (word.length() > 1 && Character.isUpperCase(word.charAt(0))) {
+                    List<Map<String, Object>> companies = structuredDataService.searchCompanies(word);
+                    for (Map<String, Object> company : companies) {
+                        String ticker = (String) company.get("ticker");
+                        if (ticker != null && !fallbackTickers.contains(ticker)) {
+                            fallbackTickers.add(ticker);
                         }
                     }
                 }
             }
+
+            tickers = fallbackTickers;
         }
 
+        plan.setTickers(tickers);
+        plan.setTicker(tickers.isEmpty() ? null : tickers.get(0));
+
+        // 3. Metric extraction 
         Matcher metricMatcher = METRIC_PATTERN.matcher(rawQuery);
         List<String> metrics = new ArrayList<>();
         while (metricMatcher.find()) {
@@ -80,4 +87,3 @@ public class QueryPlanner {
         return m;
     }
 }
-
