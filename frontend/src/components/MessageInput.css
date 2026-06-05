@@ -1,0 +1,134 @@
+.message-input-wrapper {
+  border-top: 1px solid var(--color-border);
+  background: var(--color-bg);
+  padding: 16px 24px 20px;
+}
+
+.message-input {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.message-input__attachment {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background: var(--color-accent-light);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  color: var(--color-accent);
+  align-self: flex-start;
+  max-width: 100%;
+}
+
+.message-input__attachment-icon {
+  flex-shrink: 0;
+}
+
+.message-input__attachment-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 200px;
+  font-weight: 500;
+}
+
+.message-input__attachment-remove {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-accent);
+  font-size: 16px;
+  line-height: 1;
+  padding: 0 2px;
+  opacity: 0.7;
+}
+
+.message-input__attachment-remove:hover {
+  opacity: 1;
+}
+
+.message-input__row {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 8px 12px;
+  transition: border-color 0.2s ease;
+}
+
+.message-input__row:focus-within {
+  border-color: var(--color-accent);
+}
+
+.message-input__attach-btn {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.message-input__attach-btn:hover {
+  color: var(--color-accent);
+  background: var(--color-accent-light);
+}
+
+.message-input__file-input {
+  display: none;
+}
+
+.message-input__textarea {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: var(--color-text-primary);
+  font-size: 14px;
+  line-height: 1.5;
+  resize: none;
+  outline: none;
+  min-height: 24px;
+  max-height: 120px;
+  padding: 2px 0;
+  font-family: inherit;
+}
+
+.message-input__textarea::placeholder {
+  color: var(--color-text-muted);
+}
+
+.message-input__send-btn {
+  flex-shrink: 0;
+  background: var(--color-accent);
+  border: none;
+  cursor: pointer;
+  color: #fff;
+  padding: 6px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease;
+}
+
+.message-input__send-btn:hover:not(:disabled) {
+  background: var(--color-accent-hover);
+}
+
+.message-input__send-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
