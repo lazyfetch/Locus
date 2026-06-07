@@ -1,6 +1,13 @@
-package com.lazyfetch.locus;
+package com.lazyfetch.locus.search.hybrid;
 
 import org.springframework.stereotype.Service;
+
+import com.lazyfetch.locus.data.company.StructuredDataService;
+import com.lazyfetch.locus.search.dto.HybridSearchResponse;
+import com.lazyfetch.locus.search.engine.SearchEngineService;
+import com.lazyfetch.locus.search.planner.QueryPlanner;
+import com.lazyfetch.locus.search.planner.RetrievalPlan;
+import com.lazyfetch.locus.search.vector.VectorSearchService;
 
 import java.util.ArrayList;
 import java.util.Collections;

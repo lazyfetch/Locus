@@ -1,6 +1,9 @@
-package com.lazyfetch.locus;
+package com.lazyfetch.locus.search.planner;
 
 import org.springframework.stereotype.Service;
+
+import com.lazyfetch.locus.data.company.StructuredDataService;
+import com.lazyfetch.locus.data.company.TickerTagger;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.lazyfetch.locus;
+package com.lazyfetch.locus.search.engine;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -31,6 +31,8 @@ import org.apache.lucene.store.FSDirectory;
 import org.springframework.stereotype.Service;
 
 import com.lazyfetch.locus.Filters.CustomAnalyzer;
+import com.lazyfetch.locus.data.company.TickerTagger;
+import com.lazyfetch.locus.search.embedding.EmbeddingService;
 
 @Service
 public class SearchEngineService {

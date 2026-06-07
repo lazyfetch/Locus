@@ -1,4 +1,4 @@
-package com.lazyfetch.locus;
+package com.lazyfetch.locus.search.vector;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
@@ -12,6 +12,9 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.springframework.stereotype.Service;
+
+import com.lazyfetch.locus.search.embedding.EmbeddingService;
+import com.lazyfetch.locus.search.engine.SearchEngineService;
 
 import java.util.ArrayList;
 import java.util.HashMap;

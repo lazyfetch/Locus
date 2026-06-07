@@ -1,4 +1,4 @@
-package com.lazyfetch.locus;
+package com.lazyfetch.locus.search.embedding;
 
 import ai.onnxruntime.*;
 import ai.djl.huggingface.tokenizers.Encoding;

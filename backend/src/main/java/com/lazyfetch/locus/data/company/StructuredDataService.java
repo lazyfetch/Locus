@@ -1,4 +1,4 @@
-package com.lazyfetch.locus;
+package com.lazyfetch.locus.data.company;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;

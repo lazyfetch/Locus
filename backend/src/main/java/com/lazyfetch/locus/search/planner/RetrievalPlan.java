@@ -1,4 +1,4 @@
-package com.lazyfetch.locus;
+package com.lazyfetch.locus.search.planner;
 
 import lombok.Data;
 import java.time.LocalDate;

@@ -1,4 +1,4 @@
-package com.lazyfetch.locus;
+package com.lazyfetch.locus.search.dto;
 
 import java.util.List;
 import java.util.Map;

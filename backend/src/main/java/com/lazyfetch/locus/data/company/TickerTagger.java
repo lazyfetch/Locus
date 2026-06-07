@@ -1,4 +1,4 @@
-package com.lazyfetch.locus;
+package com.lazyfetch.locus.data.company;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

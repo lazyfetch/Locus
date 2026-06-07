@@ -1,4 +1,4 @@
-package com.lazyfetch.locus;
+package com.lazyfetch.locus.search.controller;
 
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +12,9 @@ import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 
 import com.lazyfetch.locus.Filters.CustomAnalyzer;
+import com.lazyfetch.locus.search.dto.HybridSearchResponse;
+import com.lazyfetch.locus.search.engine.SearchEngineService;
+import com.lazyfetch.locus.search.hybrid.HybridSearchService;
 
 @RestController
 public class SearchController {
