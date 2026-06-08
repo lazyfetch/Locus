@@ -101,19 +101,4 @@ public class MfScheme
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
-    
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
