@@ -75,6 +75,8 @@ frontend/*.ntvs*
 frontend/*.njsproj
 frontend/*.sln
 frontend/*.sw?
-# Additional ignores requested
 frontend/idea.md
 frontend/plans/
+
+
+backend/.env
