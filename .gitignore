@@ -80,3 +80,5 @@ frontend/plans/
 
 
 backend/.env
+data_pipeline/__pycache__/
+data_pipeline/hdfc_factsheet.pdf
