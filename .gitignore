@@ -84,3 +84,10 @@ data_pipeline/__pycache__/
 data_pipeline/hdfc_factsheet.pdf
 data_pipeline/manual_slugs.json
 data_pipeline/config.json
+data_pipeline/Fund Facts - HDFC Flexi Cap Fund_May 26.pdf
+data_pipeline/fund_fact_testing.py
+data_pipeline/KIM - HDFC Flexi Cap Fund dated November 21, 2025_1.pdf
+data_pipeline/kim_testing.py
+data_pipeline/manual_kim_names.json
+data_pipeline/manual_pdf_names.json
+data_pipeline/test_details.py
