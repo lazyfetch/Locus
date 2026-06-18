@@ -100,3 +100,4 @@ data_pipeline/hdfc/load_amfi_schemes.py
 data_pipeline/hdfc/manual_kim_names.json
 data_pipeline/hdfc/manual_pdf_names.json
 data_pipeline/hdfc/manual_slugs.json
+data_pipeline/ppfas/manual_urls_ppfas.json
