@@ -101,3 +101,7 @@ data_pipeline/hdfc/manual_kim_names.json
 data_pipeline/hdfc/manual_pdf_names.json
 data_pipeline/hdfc/manual_slugs.json
 data_pipeline/ppfas/manual_urls_ppfas.json
+data_pipeline/ppfas/KIM_PPFCF.pdf
+data_pipeline/ppfas/manual_kim_urls_ppfas.json
+data_pipeline/ppfas/ppfas_website.json
+data_pipeline/ppfas/testing_kim_ppfas.py
