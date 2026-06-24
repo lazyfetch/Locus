@@ -105,3 +105,4 @@ data_pipeline/ppfas/KIM_PPFCF.pdf
 data_pipeline/ppfas/manual_kim_urls_ppfas.json
 data_pipeline/ppfas/ppfas_website.json
 data_pipeline/ppfas/testing_kim_ppfas.py
+data_pipeline/nippon/manual_slugs_nippon.json
