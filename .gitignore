@@ -107,3 +107,12 @@ data_pipeline/ppfas/ppfas_website.json
 data_pipeline/ppfas/testing_kim_ppfas.py
 data_pipeline/nippon/manual_slugs_nippon.json
 data_pipeline/sbi/manual_slugs_sbi.json
+data_pipeline/sbi/kim_debt.json
+data_pipeline/sbi/kim_equity.json
+data_pipeline/sbi/kim_fof.json
+data_pipeline/sbi/kim_etf.json
+data_pipeline/sbi/kim_hybrid.json
+data_pipeline/sbi/kim_index.json
+data_pipeline/sbi/kim_solution_oriented.json
+data_pipeline/sbi/sbi_kim_extracted.json
+data_pipeline/sbi/test_kim.py
