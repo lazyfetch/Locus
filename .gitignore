@@ -106,3 +106,4 @@ data_pipeline/ppfas/manual_kim_urls_ppfas.json
 data_pipeline/ppfas/ppfas_website.json
 data_pipeline/ppfas/testing_kim_ppfas.py
 data_pipeline/nippon/manual_slugs_nippon.json
+data_pipeline/sbi/manual_slugs_sbi.json
