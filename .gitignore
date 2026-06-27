@@ -117,3 +117,4 @@ data_pipeline/sbi/kim_solution_oriented.json
 data_pipeline/sbi/sbi_kim_extracted.json
 data_pipeline/sbi/test_kim.py
 data_pipeline/icici/manual_slugs_icici.json
+data_pipeline/icici/icici_unstructured.json
