@@ -42,7 +42,8 @@ public class EmbeddingService {
         useTokenTypeIds = session.getInputNames().contains("token_type_ids");
     }
 
-    public float[] embed(String text) throws Exception {
+    public float[] embed(String text) throws Exception 
+    {
         Encoding encoded = tokenizer.encode(text);
 
         long[] inputIds = encoded.getIds();

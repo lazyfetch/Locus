@@ -31,7 +31,7 @@ import org.apache.lucene.store.FSDirectory;
 import org.springframework.stereotype.Service;
 
 import com.lazyfetch.locus.Filters.CustomAnalyzer;
-import com.lazyfetch.locus.data.company.TickerTagger;
+// import com.lazyfetch.locus.data.company.TickerTagger;
 import com.lazyfetch.locus.search.embedding.EmbeddingService;
 
 @Service
@@ -40,15 +40,15 @@ public class SearchEngineService {
     private final Directory indexDirectory;
     private final Analyzer analyzer;
     private final EmbeddingService embeddingService;
-    private final TickerTagger tickerTagger;
+    // private final TickerTagger tickerTagger;
 
     public Directory getIndexDirectory() { return indexDirectory; }
 
-    public SearchEngineService(EmbeddingService embeddingService, TickerTagger tickerTagger) throws IOException {
+    public SearchEngineService(EmbeddingService embeddingService) throws IOException {
         this.indexDirectory = FSDirectory.open(Paths.get("index"));
         this.analyzer = new CustomAnalyzer();
         this.embeddingService = embeddingService;
-        this.tickerTagger = tickerTagger;
+        // this.tickerTagger = tickerTagger;
     }
 
     public void indexDocument(String title, String body, List<String> tickers) throws IOException {
@@ -59,9 +59,9 @@ public class SearchEngineService {
             doc.add(new TextField("body", body, Field.Store.YES));
 
             List<String> resolvedTickers = tickers;
-            if (resolvedTickers == null || resolvedTickers.isEmpty()) {
-                resolvedTickers = tickerTagger.extractTickers(title + " " + body);
-            }
+            // if (resolvedTickers == null || resolvedTickers.isEmpty()) {
+            //     resolvedTickers = tickerTagger.extractTickers(title + " " + body);
+            // }
             if (resolvedTickers != null) {
                 for (String t : resolvedTickers) {
                     if (t != null && !t.isBlank()) {

@@ -15,16 +15,21 @@ import com.lazyfetch.locus.Filters.CustomAnalyzer;
 import com.lazyfetch.locus.search.dto.HybridSearchResponse;
 import com.lazyfetch.locus.search.engine.SearchEngineService;
 import com.lazyfetch.locus.search.hybrid.HybridSearchService;
+import com.lazyfetch.locus.search.pgvector.PgVectorService;
+import com.lazyfetch.locus.records.VectorSearchResult;
 
 @RestController
 public class SearchController {
 
     private final SearchEngineService searchEngine;
     private final HybridSearchService hybridSearchService;
+    private final PgVectorService pgVectorService;
 
-    public SearchController(SearchEngineService searchEngine, HybridSearchService hybridSearchService) {
+    public SearchController(SearchEngineService searchEngine, HybridSearchService hybridSearchService,
+                        PgVectorService pgVectorService) {
         this.searchEngine = searchEngine;
         this.hybridSearchService = hybridSearchService;
+        this.pgVectorService = pgVectorService;
     }
 
     @PostMapping("/index")
@@ -75,13 +80,13 @@ public class SearchController {
         return result;
     }
 
-    @PostMapping("/hybrid-search")
-    public HybridSearchResponse hybridSearch(@RequestBody Map<String, Object> body) throws Exception {
-        String query = (String) body.get("query");
-        int topK = body.containsKey("topK") ? (int) body.get("topK") : 5;
-        double alpha = body.containsKey("alpha") ? ((Number) body.get("alpha")).doubleValue() : 0.5;
-        return hybridSearchService.hybridSearch(query, topK, alpha);
-    }
+    // @PostMapping("/hybrid-search")
+    // public HybridSearchResponse hybridSearch(@RequestBody Map<String, Object> body) throws Exception {
+    //     String query = (String) body.get("query");
+    //     int topK = body.containsKey("topK") ? (int) body.get("topK") : 5;
+    //     double alpha = body.containsKey("alpha") ? ((Number) body.get("alpha")).doubleValue() : 0.5;
+    //     return hybridSearchService.hybridSearch(query, topK, alpha);
+    // }
 
     private List<String> getTokens(Analyzer analyzer, String text) throws Exception {
         List<String> tokens = new ArrayList<>();
@@ -94,5 +99,10 @@ public class SearchController {
             stream.end();
         }
         return tokens;
+    }
+
+    @GetMapping("/test-pgvector")
+    public List<VectorSearchResult> testPgVector(@RequestParam String q) throws Exception {
+        return pgVectorService.search(q, 5, null);
     }
 }
