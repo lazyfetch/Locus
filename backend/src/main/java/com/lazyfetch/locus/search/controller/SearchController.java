@@ -16,7 +16,11 @@ import com.lazyfetch.locus.search.dto.HybridSearchResponse;
 import com.lazyfetch.locus.search.engine.SearchEngineService;
 import com.lazyfetch.locus.search.hybrid.HybridSearchService;
 import com.lazyfetch.locus.search.pgvector.PgVectorService;
+import com.lazyfetch.locus.search.planner.MfQueryPlanner;
 import com.lazyfetch.locus.records.VectorSearchResult;
+import com.lazyfetch.locus.search.planner.MfQueryPlanner;
+import com.lazyfetch.locus.search.planner.RetrievalPlan;
+import com.lazyfetch.locus.search.data.MfDataService;
 
 @RestController
 public class SearchController {
@@ -24,12 +28,18 @@ public class SearchController {
     private final SearchEngineService searchEngine;
     private final HybridSearchService hybridSearchService;
     private final PgVectorService pgVectorService;
+    private final MfQueryPlanner mfQueryPlanner;
+    private final MfDataService mfDataService;
+
 
     public SearchController(SearchEngineService searchEngine, HybridSearchService hybridSearchService,
-                        PgVectorService pgVectorService) {
+                        PgVectorService pgVectorService, MfQueryPlanner mfQueryPlanner, MfDataService mfDataService) {
         this.searchEngine = searchEngine;
         this.hybridSearchService = hybridSearchService;
         this.pgVectorService = pgVectorService;
+        this.mfQueryPlanner = mfQueryPlanner;
+        this.mfDataService = mfDataService;
+
     }
 
     @PostMapping("/index")
@@ -104,5 +114,26 @@ public class SearchController {
     @GetMapping("/test-pgvector")
     public List<VectorSearchResult> testPgVector(@RequestParam String q) throws Exception {
         return pgVectorService.search(q, 5, null);
+    }
+
+    @GetMapping("/test-plan")
+    public RetrievalPlan testPlan(@RequestParam String q) {
+        return mfQueryPlanner.plan(q);
+    }
+
+    @GetMapping("/debug-funds")
+    public List<Map<String, Object>> debugFunds(@RequestParam String q) throws Exception {
+        List<Integer> codes = mfQueryPlanner.plan(q).getSchemeCodes();
+        List<Map<String, Object>> result = new ArrayList<>();
+        for (Integer code : codes) 
+        {
+            Map<String, Object> details = mfDataService.getFundDetails(code);
+            if (details != null) 
+            {
+                result.add(details);
+            }
+            if (result.size() >= 20) break;  
+        }
+        return result;
     }
 }

@@ -25,7 +25,7 @@ public class FundResolver
     public void init() {
         nameToSchemeCode.clear();
         try {
-            List<Map<String, Object>> allFunds = mfDataService.searchFundByName("");
+            List<Map<String, Object>> allFunds = mfDataService.getAllFunds();
             for (Map<String, Object> fund : allFunds) 
             {
                 String name = (String) fund.get("scheme_name");
@@ -56,12 +56,58 @@ public class FundResolver
 
         for (Map.Entry<String, Integer> entry : nameToSchemeCode.entrySet()) 
         {
-            if (lower.contains(entry.getKey())) 
+            String fundName = entry.getKey();  
+            if (isFundReferenced(fundName, lower)) 
             {
                 found.add(entry.getValue());
             }
         }
 
         return new ArrayList<>(found);
+    }
+
+    private static final Set<String> SKIP_WORDS = Set.of(
+        "-", "–", "fund", "plan", "direct", "regular", "growth", "idcw",
+        "option", "the", "a", "an", "of", "in", "for", "and", "reinvestment"
+    );
+
+    private boolean isFundReferenced(String fundName, String queryLower) 
+    {
+        String coreName = fundName.split("\\s*-\\s*")[0].trim();
+        String[] fundWords = coreName.split("\\s+");
+        
+        String firstWord = null;
+        for (String w : fundWords) {
+            if (!SKIP_WORDS.contains(w.trim().toLowerCase())) {
+                firstWord = w.trim().toLowerCase();
+                break;
+            }
+        }
+        if (firstWord == null) return false;
+        
+        for (int startIdx = 0; startIdx < fundWords.length; startIdx++) 
+        {
+            StringBuilder consecutive = new StringBuilder();
+            int meaningfulWords = 0;
+            
+            for (int i = startIdx; i < fundWords.length; i++) 
+            {
+                String word = fundWords[i].trim().toLowerCase();
+                if (word.isEmpty() || SKIP_WORDS.contains(word)) continue;
+                
+                if (consecutive.length() > 0) consecutive.append(" ");
+                consecutive.append(word);
+                meaningfulWords++;
+                
+                if (meaningfulWords >= 2 
+                    && consecutive.toString().contains(firstWord)
+                    && queryLower.contains(consecutive.toString())) 
+                {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
     }
 }

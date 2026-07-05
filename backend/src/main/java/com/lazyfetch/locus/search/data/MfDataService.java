@@ -107,12 +107,22 @@ public class MfDataService
     }
 
     public List<Map<String, Object>> searchFundsByHouse(String fundHouse) {
-        String sql = """
-                SELECT scheme_code, scheme_name, scheme_category
-                FROM mf_scheme
-                WHERE LOWER(fund_house) LIKE LOWER(?)
-                LIMIT 20
+        String sql = 
+                """
+                    SELECT scheme_code, scheme_name, scheme_category
+                    FROM mf_scheme
+                    WHERE LOWER(fund_house) LIKE LOWER(?)
+                    LIMIT 20
                 """;
         return jdbc.queryForList(sql, "%" + fundHouse + "%");
+    }
+
+    public List<Map<String, Object>> getAllFunds() 
+    {
+        String sql = """
+                SELECT scheme_code, scheme_name
+                FROM mf_scheme
+                """;
+        return jdbc.queryForList(sql);
     }
 }
