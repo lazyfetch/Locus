@@ -122,7 +122,17 @@ public class MfDataService
         String sql = """
                 SELECT scheme_code, scheme_name
                 FROM mf_scheme
+                WHERE is_locus_target = TRUE
                 """;
         return jdbc.queryForList(sql);
+    }
+
+    public List<Map<String, Object>> getTargetFundsByHouse(String fundHouse) {
+        String sql = """
+                SELECT scheme_code, scheme_name, fund_house, scheme_category
+                FROM mf_scheme
+                WHERE is_locus_target = TRUE AND LOWER(fund_house) LIKE LOWER(?)
+                """;
+        return jdbc.queryForList(sql, "%" + fundHouse + "%");
     }
 }

@@ -90,13 +90,12 @@ public class SearchController {
         return result;
     }
 
-    // @PostMapping("/hybrid-search")
-    // public HybridSearchResponse hybridSearch(@RequestBody Map<String, Object> body) throws Exception {
-    //     String query = (String) body.get("query");
-    //     int topK = body.containsKey("topK") ? (int) body.get("topK") : 5;
-    //     double alpha = body.containsKey("alpha") ? ((Number) body.get("alpha")).doubleValue() : 0.5;
-    //     return hybridSearchService.hybridSearch(query, topK, alpha);
-    // }
+    @PostMapping("/api/search")
+    public HybridSearchResponse apiSearch(@RequestBody Map<String, Object> body) throws Exception {
+        String query = (String) body.get("query");
+        int topK = body.containsKey("topK") ? ((Number) body.get("topK")).intValue() : 5;
+        return hybridSearchService.hybridSearch(query, topK);
+    }
 
     private List<String> getTokens(Analyzer analyzer, String text) throws Exception {
         List<String> tokens = new ArrayList<>();
