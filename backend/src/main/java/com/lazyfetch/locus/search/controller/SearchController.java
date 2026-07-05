@@ -21,6 +21,10 @@ import com.lazyfetch.locus.records.VectorSearchResult;
 import com.lazyfetch.locus.search.planner.MfQueryPlanner;
 import com.lazyfetch.locus.search.planner.RetrievalPlan;
 import com.lazyfetch.locus.search.data.MfDataService;
+import com.lazyfetch.locus.search.context.ContextBudgetAllocator;
+import com.lazyfetch.locus.search.context.BudgetAllocation;
+import com.lazyfetch.locus.search.context.ContextCompressor;
+import com.lazyfetch.locus.search.context.ContextAssembler;
 
 @RestController
 public class SearchController {
@@ -30,15 +34,24 @@ public class SearchController {
     private final PgVectorService pgVectorService;
     private final MfQueryPlanner mfQueryPlanner;
     private final MfDataService mfDataService;
+    private final ContextBudgetAllocator budgetAllocator;
+    private final ContextCompressor contextCompressor;
+    private final ContextAssembler contextAssembler;
 
 
     public SearchController(SearchEngineService searchEngine, HybridSearchService hybridSearchService,
-                        PgVectorService pgVectorService, MfQueryPlanner mfQueryPlanner, MfDataService mfDataService) {
+                        PgVectorService pgVectorService, MfQueryPlanner mfQueryPlanner, MfDataService mfDataService,
+                        ContextBudgetAllocator budgetAllocator,
+                        ContextCompressor contextCompressor,
+                        ContextAssembler contextAssembler) {
         this.searchEngine = searchEngine;
         this.hybridSearchService = hybridSearchService;
         this.pgVectorService = pgVectorService;
         this.mfQueryPlanner = mfQueryPlanner;
         this.mfDataService = mfDataService;
+        this.budgetAllocator = budgetAllocator;
+        this.contextCompressor = contextCompressor;
+        this.contextAssembler = contextAssembler;
 
     }
 
@@ -133,6 +146,44 @@ public class SearchController {
             }
             if (result.size() >= 20) break;  
         }
+        return result;
+    }
+
+    @GetMapping("/test-prompt")
+    public Map<String, Object> testPrompt(@RequestParam String q) throws Exception {
+        HybridSearchResponse searchResults = hybridSearchService.hybridSearch(q, 5);
+        
+        // allocate budget
+        boolean hasData = !searchResults.getStructured().isEmpty();
+        boolean hasChunks = !searchResults.getUnstructured().isEmpty();
+        BudgetAllocation allocation = budgetAllocator.allocate(
+            searchResults.getPlan().getIntent(), false, hasData, hasChunks);
+        
+        // compress
+        List<Map<String, Object>> compressedData = contextCompressor.compressStructured(
+            searchResults.getStructured(), allocation.getDataTokens());
+        List<Map<String, Object>> compressedChunks = contextCompressor.compressChunks(
+            searchResults.getUnstructured(), allocation.getChunkTokens());
+        
+        // assemble
+        String prompt = contextAssembler.assemble(
+            compressedData, compressedChunks, null, q);
+        
+        // return
+        Map<String, Object> result = new HashMap<>();
+        result.put("prompt", prompt);
+        result.put("estimatedTokens", prompt.length() / 4);
+        result.put("budgetAllocation", Map.of(
+            "history", allocation.getHistoryTokens(),
+            "data", allocation.getDataTokens(),
+            "chunks", allocation.getChunkTokens(),
+            "total", allocation.getTotal()
+        ));
+        result.put("compressedDataCount", compressedData.size());
+        result.put("compressedChunksCount", compressedChunks.size());
+        result.put("rawDataCount", searchResults.getStructured().size());
+        result.put("rawChunksCount", searchResults.getUnstructured().size());
+        
         return result;
     }
 }
