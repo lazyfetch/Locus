@@ -46,6 +46,37 @@ public class MfQueryPlanner
         return plan;
     }
 
+    public RetrievalPlan plan(String rawQuery, List<Integer> previousSchemeCodes) 
+    {
+        RetrievalPlan plan = new RetrievalPlan(rawQuery);
+
+        // 1. Find funds mentioned in current query
+        List<Integer> schemeCodes = fundResolver.resolveFunds(rawQuery);
+        
+        // 2. ALSO include funds from previous turns (for follow-ups)
+        if (previousSchemeCodes != null) 
+        {
+            for (Integer code : previousSchemeCodes) 
+            {
+                if (!schemeCodes.contains(code)) {
+                    schemeCodes.add(code);
+                }
+            }
+        }
+        
+        plan.setSchemeCodes(schemeCodes);
+
+        // 3. Detect intent
+        String intent = detectIntent(rawQuery);
+        plan.setIntent(intent);
+
+        // 4. Detect metric types
+        List<String> metrics = detectMetrics(rawQuery);
+        plan.setMetricTypes(metrics);
+
+        return plan;
+    }
+
     private String detectIntent(String query) 
     {
         if (COMPARE_PATTERN.matcher(query).find()) 

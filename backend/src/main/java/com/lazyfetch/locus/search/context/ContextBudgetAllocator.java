@@ -19,8 +19,6 @@ public class ContextBudgetAllocator {
 
     public BudgetAllocation allocate(String intent, boolean hasHistory, boolean hasData, boolean hasChunks) 
     {
-
-       n
         int historyPct = hasHistory ? 25 : 0;  // 25% if history exists, else 0%
 
         int dataPct;

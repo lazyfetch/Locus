@@ -25,6 +25,7 @@ import com.lazyfetch.locus.search.context.ContextBudgetAllocator;
 import com.lazyfetch.locus.search.context.BudgetAllocation;
 import com.lazyfetch.locus.search.context.ContextCompressor;
 import com.lazyfetch.locus.search.context.ContextAssembler;
+import com.lazyfetch.locus.search.rag.RagService;
 
 @RestController
 public class SearchController {
@@ -37,13 +38,14 @@ public class SearchController {
     private final ContextBudgetAllocator budgetAllocator;
     private final ContextCompressor contextCompressor;
     private final ContextAssembler contextAssembler;
+    private final RagService ragService;
 
 
     public SearchController(SearchEngineService searchEngine, HybridSearchService hybridSearchService,
                         PgVectorService pgVectorService, MfQueryPlanner mfQueryPlanner, MfDataService mfDataService,
                         ContextBudgetAllocator budgetAllocator,
                         ContextCompressor contextCompressor,
-                        ContextAssembler contextAssembler) {
+                        ContextAssembler contextAssembler, RagService ragService) {
         this.searchEngine = searchEngine;
         this.hybridSearchService = hybridSearchService;
         this.pgVectorService = pgVectorService;
@@ -52,6 +54,7 @@ public class SearchController {
         this.budgetAllocator = budgetAllocator;
         this.contextCompressor = contextCompressor;
         this.contextAssembler = contextAssembler;
+        this.ragService = ragService;
 
     }
 
@@ -185,5 +188,12 @@ public class SearchController {
         result.put("rawChunksCount", searchResults.getUnstructured().size());
         
         return result;
+    }
+
+    @PostMapping("/api/ask")
+    public Map<String, Object> ask(@RequestBody Map<String, Object> body) throws Exception {
+        String question = (String) body.get("question");
+        String conversationId = (String) body.get("conversationId");
+        return ragService.ask(question, conversationId);
     }
 }

@@ -83,3 +83,4 @@ data_pipeline/**/load_amfi_schemes.py
 data_pipeline/**/load_*_schemes.py
 timeline.txt
 backend/context.txt
+plans/frontend-backend-integration-analysis.md

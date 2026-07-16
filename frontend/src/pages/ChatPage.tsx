@@ -5,7 +5,7 @@ import ConversationSidebar from '../components/ConversationSidebar';
 import MessageList from '../components/MessageList';
 import MessageInput from '../components/MessageInput';
 import ContextPanel from '../components/ContextPanel';
-import { getMockResponse, WELCOME_MESSAGE } from '../data/mockData';
+import { WELCOME_MESSAGE } from '../data/mockData';
 import './ChatPage.css';
 
 const STORAGE_KEY = 'locus-conversations';
@@ -21,7 +21,7 @@ function loadConversations(): Conversation[] {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) return JSON.parse(stored) as Conversation[];
   } catch {
-    /* ignore */
+ 
   }
   return [];
 }
@@ -30,7 +30,6 @@ function saveConversations(conversations: Conversation[]): void {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(conversations));
   } catch {
-    /* ignore */
   }
 }
 
@@ -108,7 +107,7 @@ export default function ChatPage() {
     });
   }, [activeId]);
 
-  const handleSend = useCallback((text: string, attachment: File | null) => {
+  const handleSend = useCallback(async (text: string, attachment: File | null) => {
     if (!text && !attachment) return;
 
     const userTokens = estimateTokens(text);
@@ -132,26 +131,57 @@ export default function ChatPage() {
 
     setIsTyping(true);
 
-    setTimeout(() => {
-      const response = getMockResponse(text);
-      const responseTokens = estimateTokens(response.text) + 100;
+    try {
+      const res = await fetch('/api/ask', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          question: text,
+          conversationId: activeId,
+        }),
+      });
 
+      if (!res.ok) {
+        throw new Error(`API error: ${res.status}`);
+      }
+
+      const data = await res.json();
+
+      
+      const assistantMessage: Message = {
+        role: 'assistant',
+        content: data.answer || '',
+        metrics: null,
+        sources: (data.sources || []).map((s: Record<string, unknown>) => ({
+          title: (s.section_type as string) || 'Source',
+          snippet: (s.chunk_text as string) || '',
+        })),
+      };
+
+      updateConversation(activeId, (conv) => ({
+        ...conv,
+        messages: [...conv.messages, assistantMessage],
+        tokenUsed: Math.min(conv.tokenUsed + (data.tokensUsed || 0), TOKEN_TOTAL),
+      }));
+    } catch (err) {
+      console.error('Failed to get AI response:', err);
+
+      
       updateConversation(activeId, (conv) => ({
         ...conv,
         messages: [
           ...conv.messages,
           {
             role: 'assistant',
-            content: response.text,
-            metrics: response.metrics ?? null,
-            sources: response.sources ?? null,
+            content: `**Error:** Could not reach the AI backend. Ensure the server is running on port 8081.\n\n\`\`\`\n${err instanceof Error ? err.message : String(err)}\n\`\`\``,
+            metrics: null,
+            sources: [],
           } as Message,
         ],
-        tokenUsed: Math.min(conv.tokenUsed + responseTokens, TOKEN_TOTAL),
       }));
-
+    } finally {
       setIsTyping(false);
-    }, 800 + Math.random() * 700);
+    }
   }, [activeId, updateConversation]);
 
   const toggleSidebar = useCallback(() => {
