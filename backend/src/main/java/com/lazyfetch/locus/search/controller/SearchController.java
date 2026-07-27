@@ -18,7 +18,6 @@ import com.lazyfetch.locus.search.hybrid.HybridSearchService;
 import com.lazyfetch.locus.search.pgvector.PgVectorService;
 import com.lazyfetch.locus.search.planner.MfQueryPlanner;
 import com.lazyfetch.locus.records.VectorSearchResult;
-import com.lazyfetch.locus.search.planner.MfQueryPlanner;
 import com.lazyfetch.locus.search.planner.RetrievalPlan;
 import com.lazyfetch.locus.search.data.MfDataService;
 import com.lazyfetch.locus.search.context.ContextBudgetAllocator;
@@ -26,6 +25,16 @@ import com.lazyfetch.locus.search.context.BudgetAllocation;
 import com.lazyfetch.locus.search.context.ContextCompressor;
 import com.lazyfetch.locus.search.context.ContextAssembler;
 import com.lazyfetch.locus.search.rag.RagService;
+import com.lazyfetch.locus.eval.EvaluationService;
+import com.lazyfetch.locus.eval.EvaluationReport;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.nio.file.*;
+import com.lazyfetch.locus.search.llm.LlmClient;
+import com.lazyfetch.locus.search.llm.LlmResponse;
+import com.fasterxml.jackson.core.type.TypeReference;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @RestController
 public class SearchController {
@@ -39,13 +48,15 @@ public class SearchController {
     private final ContextCompressor contextCompressor;
     private final ContextAssembler contextAssembler;
     private final RagService ragService;
-
+    private final EvaluationService evaluationService;
+    private final LlmClient llmClient;
+    private final ObjectMapper mapper;
 
     public SearchController(SearchEngineService searchEngine, HybridSearchService hybridSearchService,
                         PgVectorService pgVectorService, MfQueryPlanner mfQueryPlanner, MfDataService mfDataService,
                         ContextBudgetAllocator budgetAllocator,
                         ContextCompressor contextCompressor,
-                        ContextAssembler contextAssembler, RagService ragService) {
+                        ContextAssembler contextAssembler, RagService ragService, EvaluationService evaluationService, LlmClient llmClient, ObjectMapper mapper) {
         this.searchEngine = searchEngine;
         this.hybridSearchService = hybridSearchService;
         this.pgVectorService = pgVectorService;
@@ -55,7 +66,9 @@ public class SearchController {
         this.contextCompressor = contextCompressor;
         this.contextAssembler = contextAssembler;
         this.ragService = ragService;
-
+        this.evaluationService = evaluationService;
+        this.llmClient = llmClient;
+        this.mapper = mapper;
     }
 
     @PostMapping("/index")
@@ -196,4 +209,100 @@ public class SearchController {
         String conversationId = (String) body.get("conversationId");
         return ragService.ask(question, conversationId);
     }
+
+    @GetMapping("/eval/baseline")
+    public EvaluationReport runBaseline() throws Exception {
+        return evaluationService.evaluate();
+    }
+
+    @GetMapping("/eval/save")
+    public Map<String, Object> saveBaseline(@RequestParam String phase) throws Exception {
+        EvaluationReport report = evaluationService.evaluate();
+        
+        // Build history entry
+        Map<String, Object> entry = new HashMap<>();
+        entry.put("timestamp", java.time.LocalDate.now().toString());
+        entry.put("phase", phase);
+        entry.put("avgPrecision", report.getAvgPrecision());
+        entry.put("avgRecall", report.getAvgRecall());
+        entry.put("intentAccuracy", report.getIntentAccuracy());
+        entry.put("metricsAccuracy", report.getMetricsAccuracy());
+        entry.put("avgLatencyMs", report.getAvgLatencyMs());
+        entry.put("totalTokensUsed", report.getTotalTokensUsed());
+        
+        // Read existing history
+        Path historyPath = Paths.get("eval_history.json");
+        List<Map<String, Object>> history = new ArrayList<>();
+        if (Files.exists(historyPath)) {
+            history = mapper.readValue(historyPath.toFile(), new TypeReference<List<Map<String, Object>>>() {});
+        }
+        
+        // Append and save
+        history.add(entry);
+        mapper.writerWithDefaultPrettyPrinter().writeValue(historyPath.toFile(), history);
+        
+        return Map.of("status", "saved", "entry", entry);
+    }
+
+    @GetMapping("/eval/table")
+    public String getEvolutionTable() throws Exception {
+        Path historyPath = Paths.get("eval_history.json");
+        if (!Files.exists(historyPath)) return "No history yet. Run /eval/save first.";
+        
+        List<Map<String, Object>> history = mapper.readValue(
+            historyPath.toFile(), new TypeReference<List<Map<String, Object>>>() {});
+        
+        StringBuilder sb = new StringBuilder();
+        sb.append("# Performance Evolution\n\n");
+        sb.append("| Phase | Precision | Recall | Intent Acc | Metrics Acc | Latency (ms) | Tokens |\n");
+        sb.append("|---|---|---|---|---|---|---|\n");
+        
+        for (var entry : history) {
+            sb.append(String.format("| %s | %.2f | %.2f | %.1f%% | %.1f%% | %d | %d |\n",
+                entry.get("phase"),
+                (double) entry.get("avgPrecision"),
+                (double) entry.get("avgRecall"),
+                (double) entry.get("intentAccuracy"),
+                (double) entry.get("metricsAccuracy"),
+                ((Number) entry.get("avgLatencyMs")).longValue(),
+                (int) entry.get("totalTokensUsed")
+            ));
+        }
+        
+        return sb.toString();
+    }
+
+    @GetMapping("/eval/compare")
+    public Map<String, Object> compareWithVanilla(@RequestParam String q) throws Exception {
+        // Vanilla LLM
+        String vanillaPrompt = "Answer this financial question concisely. If you don't have current data, say so:\n\n" + q;
+        long vanillaStart = System.currentTimeMillis();
+        LlmResponse vanillaResponse = llmClient.chat(vanillaPrompt, q, 500);
+        long vanillaLatency = System.currentTimeMillis() - vanillaStart;
+        
+        
+        long locusStart = System.currentTimeMillis();
+        Map<String, Object> locusResponse = ragService.ask(q, null);
+        long locusLatency = System.currentTimeMillis() - locusStart;
+        
+        
+        Map<String, Object> result = new HashMap<>();
+        result.put("question", q);
+        
+        Map<String, Object> vanilla = new HashMap<>();
+        vanilla.put("answer", vanillaResponse.getContent());
+        vanilla.put("tokensUsed", vanillaResponse.getTotalTokens());
+        vanilla.put("latencyMs", vanillaLatency);
+        result.put("vanilla", vanilla);
+        
+        Map<String, Object> locus = new HashMap<>();
+        locus.put("answer", locusResponse.get("answer"));
+        locus.put("tokensUsed", locusResponse.get("tokensUsed"));
+        locus.put("latencyMs", locusLatency);
+        locus.put("sources", locusResponse.get("sources"));
+        result.put("locus", locus);
+        
+        return result;
+    }
+
 }

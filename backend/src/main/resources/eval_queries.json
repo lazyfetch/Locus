@@ -1,0 +1,162 @@
+[
+  {
+    "query": "What are the returns of HDFC Flexi Cap Fund?",
+    "expectedFundCodes": [118955],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": ["returns"],
+    "difficulty": "easy",
+    "category": "fund_lookup"
+  },
+  {
+    "query": "Top holdings of SBI Bluechip Fund",
+    "expectedFundCodes": [119354],
+    "expectedIntent": "HOLDINGS",
+    "expectedMetrics": ["holdings"],
+    "difficulty": "easy",
+    "category": "fund_lookup"
+  },
+  {
+    "query": "Compare HDFC Flexi Cap and SBI Bluechip returns",
+    "expectedFundCodes": [118955, 119354],
+    "expectedIntent": "COMPARE_FUNDS",
+    "expectedMetrics": ["returns"],
+    "difficulty": "easy",
+    "category": "comparison"
+  },
+  {
+    "query": "What is the NAV of Nippon India Growth Fund?",
+    "expectedFundCodes": [119798],
+    "expectedIntent": "NAV",
+    "expectedMetrics": ["nav"],
+    "difficulty": "easy",
+    "category": "fund_lookup"
+  },
+  {
+    "query": "Tell me about ICICI Pru Value Fund",
+    "expectedFundCodes": [146215],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": [],
+    "difficulty": "easy",
+    "category": "fund_lookup"
+  },
+  {
+    "query": "Returns of SBI Bluechip",
+    "expectedFundCodes": [119354],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": ["returns"],
+    "difficulty": "medium",
+    "category": "fund_lookup"
+  },
+  {
+    "query": "How has HDFC Flexi Cap performed?",
+    "expectedFundCodes": [118955],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": ["returns"],
+    "difficulty": "medium",
+    "category": "fund_lookup"
+  },
+  {
+    "query": "Show me Nippon India Growth",
+    "expectedFundCodes": [119798],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": [],
+    "difficulty": "medium",
+    "category": "fund_lookup"
+  },
+  {
+    "query": "What about ICICI Pru Value?",
+    "expectedFundCodes": [146215],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": [],
+    "difficulty": "medium",
+    "category": "follow_up"
+  },
+  {
+    "query": "What are its top holdings?",
+    "expectedFundCodes": [],
+    "expectedIntent": "HOLDINGS",
+    "expectedMetrics": ["holdings"],
+    "difficulty": "hard",
+    "category": "follow_up"
+  },
+  {
+    "query": "How does it compare to SBI Bluechip?",
+    "expectedFundCodes": [119354],
+    "expectedIntent": "COMPARE_FUNDS",
+    "expectedMetrics": ["returns"],
+    "difficulty": "hard",
+    "category": "follow_up"
+  },
+  {
+    "query": "Which is better, HDFC Flexi Cap or SBI Bluechip?",
+    "expectedFundCodes": [118955, 119354],
+    "expectedIntent": "COMPARE_FUNDS",
+    "expectedMetrics": ["returns"],
+    "difficulty": "medium",
+    "category": "comparison"
+  },
+  {
+    "query": "Funds with highest 3Y returns",
+    "expectedFundCodes": [],
+    "expectedIntent": "GENERAL",
+    "expectedMetrics": ["returns"],
+    "difficulty": "hard",
+    "category": "comparison"
+  },
+  {
+    "query": "Is HDFC Flexi Cap good for long term?",
+    "expectedFundCodes": [118955],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": [],
+    "difficulty": "medium",
+    "category": "fund_lookup"
+  },
+  {
+    "query": "What is the expense ratio?",
+    "expectedFundCodes": [],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": [],
+    "difficulty": "hard",
+    "category": "follow_up"
+  },
+  {
+    "query": "Compare returns of all HDFC funds",
+    "expectedFundCodes": [],
+    "expectedIntent": "COMPARE_FUNDS",
+    "expectedMetrics": ["returns"],
+    "difficulty": "hard",
+    "category": "comparison"
+  },
+  {
+    "query": "Should I invest in this fund?",
+    "expectedFundCodes": [],
+    "expectedIntent": "GENERAL",
+    "expectedMetrics": [],
+    "difficulty": "hard",
+    "category": "follow_up"
+  },
+  {
+    "query": "Tell me about a fund that doesn't exist",
+    "expectedFundCodes": [],
+    "expectedIntent": "GENERAL",
+    "expectedMetrics": [],
+    "difficulty": "easy",
+    "category": "edge_case"
+  },
+  {
+    "query": "asdfgh",
+    "expectedFundCodes": [],
+    "expectedIntent": "GENERAL",
+    "expectedMetrics": [],
+    "difficulty": "easy",
+    "category": "edge_case"
+  },
+  {
+    "query": "risk ratios of SBI Bluechip",
+    "expectedFundCodes": [119354],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": [],
+    "difficulty": "medium",
+    "category": "fund_lookup"
+  }
+]

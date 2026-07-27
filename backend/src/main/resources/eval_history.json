@@ -1,0 +1,12 @@
+[
+  {
+    "timestamp": "2026-07-28",
+    "phase": "MVP Baseline",
+    "avgPrecision": 0.28,
+    "avgRecall": 0.22,
+    "intentAccuracy": 66.7,
+    "metricsAccuracy": 83.3,
+    "avgLatencyMs": 129,
+    "totalTokensUsed": 58030
+  }
+]
