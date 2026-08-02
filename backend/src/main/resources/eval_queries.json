@@ -8,40 +8,40 @@
     "category": "fund_lookup"
   },
   {
-    "query": "Top holdings of SBI Bluechip Fund",
-    "expectedFundCodes": [119354],
+    "query": "Top holdings of Nippon India Large Cap Fund",
+    "expectedFundCodes": [118632],
     "expectedIntent": "HOLDINGS",
     "expectedMetrics": ["holdings"],
     "difficulty": "easy",
     "category": "fund_lookup"
   },
   {
-    "query": "Compare HDFC Flexi Cap and SBI Bluechip returns",
-    "expectedFundCodes": [118955, 119354],
+    "query": "Compare HDFC Flexi Cap and Nippon India Large Cap returns",
+    "expectedFundCodes": [118955, 118632],
     "expectedIntent": "COMPARE_FUNDS",
     "expectedMetrics": ["returns"],
     "difficulty": "easy",
     "category": "comparison"
   },
   {
-    "query": "What is the NAV of Nippon India Growth Fund?",
-    "expectedFundCodes": [119798],
+    "query": "What is the NAV of Nippon India Growth Mid Cap Fund?",
+    "expectedFundCodes": [118668],
     "expectedIntent": "NAV",
     "expectedMetrics": ["nav"],
     "difficulty": "easy",
     "category": "fund_lookup"
   },
   {
-    "query": "Tell me about ICICI Pru Value Fund",
-    "expectedFundCodes": [146215],
+    "query": "Tell me about ICICI Prudential Value Fund",
+    "expectedFundCodes": [120323],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
     "difficulty": "easy",
     "category": "fund_lookup"
   },
   {
-    "query": "Returns of SBI Bluechip",
-    "expectedFundCodes": [119354],
+    "query": "Returns of Nippon India Large Cap",
+    "expectedFundCodes": [118632],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": ["returns"],
     "difficulty": "medium",
@@ -56,16 +56,16 @@
     "category": "fund_lookup"
   },
   {
-    "query": "Show me Nippon India Growth",
-    "expectedFundCodes": [119798],
+    "query": "Show me Nippon India Growth Mid Cap",
+    "expectedFundCodes": [118668],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
     "difficulty": "medium",
     "category": "fund_lookup"
   },
   {
-    "query": "What about ICICI Pru Value?",
-    "expectedFundCodes": [146215],
+    "query": "What about ICICI Prudential Value?",
+    "expectedFundCodes": [120323],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
     "difficulty": "medium",
@@ -80,16 +80,16 @@
     "category": "follow_up"
   },
   {
-    "query": "How does it compare to SBI Bluechip?",
-    "expectedFundCodes": [119354],
+    "query": "How does it compare to Nippon India Large Cap?",
+    "expectedFundCodes": [118632],
     "expectedIntent": "COMPARE_FUNDS",
     "expectedMetrics": ["returns"],
     "difficulty": "hard",
     "category": "follow_up"
   },
   {
-    "query": "Which is better, HDFC Flexi Cap or SBI Bluechip?",
-    "expectedFundCodes": [118955, 119354],
+    "query": "Which is better, HDFC Flexi Cap or Nippon India Large Cap?",
+    "expectedFundCodes": [118955, 118632],
     "expectedIntent": "COMPARE_FUNDS",
     "expectedMetrics": ["returns"],
     "difficulty": "medium",
@@ -152,11 +152,84 @@
     "category": "edge_case"
   },
   {
-    "query": "risk ratios of SBI Bluechip",
-    "expectedFundCodes": [119354],
+    "query": "risk ratios of Nippon India Large Cap",
+    "expectedFundCodes": [118632],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
     "difficulty": "medium",
     "category": "fund_lookup"
+  },
+
+  {
+    "query": "How did HDFC FC do?",
+    "expectedFundCodes": [118955],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": ["returns"],
+    "difficulty": "hard",
+    "category": "ner_abbreviation"
+  },
+  {
+    "query": "Compare hdfc flexicap and nippon largecap",
+    "expectedFundCodes": [118955, 118632],
+    "expectedIntent": "COMPARE_FUNDS",
+    "expectedMetrics": ["returns"],
+    "difficulty": "hard",
+    "category": "ner_abbreviation"
+  },
+  {
+    "query": "whats the return on hdfc flexi cap",
+    "expectedFundCodes": [118955],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": ["returns"],
+    "difficulty": "medium",
+    "category": "ner_messy"
+  },
+  {
+    "query": "hdfc flexi cap 5 year return",
+    "expectedFundCodes": [118955],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": ["returns"],
+    "difficulty": "medium",
+    "category": "ner_messy"
+  },
+  {
+    "query": "nippon india large cap nav",
+    "expectedFundCodes": [118632],
+    "expectedIntent": "NAV",
+    "expectedMetrics": ["nav"],
+    "difficulty": "medium",
+    "category": "ner_messy"
+  },
+  {
+    "query": "hdfc flexi cap holdings pls",
+    "expectedFundCodes": [118955],
+    "expectedIntent": "HOLDINGS",
+    "expectedMetrics": ["holdings"],
+    "difficulty": "medium",
+    "category": "ner_messy"
+  },
+  {
+    "query": "show me icici prudential value fund returns",
+    "expectedFundCodes": [120323],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": ["returns"],
+    "difficulty": "medium",
+    "category": "ner_messy"
+  },
+  {
+    "query": "How is HDFC Flexi Cap performing this year?",
+    "expectedFundCodes": [118955],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": ["returns"],
+    "difficulty": "medium",
+    "category": "ner_messy"
+  },
+  {
+    "query": "What stocks does Nippon India Large Cap hold?",
+    "expectedFundCodes": [118632],
+    "expectedIntent": "HOLDINGS",
+    "expectedMetrics": ["holdings"],
+    "difficulty": "medium",
+    "category": "ner_messy"
   }
 ]
