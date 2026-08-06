@@ -123,6 +123,7 @@ public class MfDataService
                 SELECT scheme_code, scheme_name
                 FROM mf_scheme
                 WHERE is_locus_target = TRUE
+              AND is_primary_scheme = TRUE
                 """;
         return jdbc.queryForList(sql);
     }
