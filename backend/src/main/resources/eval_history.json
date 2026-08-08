@@ -1,12 +1,19 @@
-[
-  {
-    "timestamp": "2026-07-28",
-    "phase": "MVP Baseline",
-    "avgPrecision": 0.28,
-    "avgRecall": 0.22,
-    "intentAccuracy": 66.7,
-    "metricsAccuracy": 83.3,
-    "avgLatencyMs": 129,
-    "totalTokensUsed": 58030
-  }
-]
+[ {
+  "timestamp" : "2026-07-28",
+  "phase" : "MVP Baseline",
+  "avgPrecision" : 0.28,
+  "avgRecall" : 0.22,
+  "intentAccuracy" : 66.7,
+  "metricsAccuracy" : 83.3,
+  "avgLatencyMs" : 129,
+  "totalTokensUsed" : 58030
+}, {
+  "timestamp" : "2026-08-09",
+  "phase" : "NER Added",
+  "avgPrecision" : 0.1,
+  "avgRecall" : 0.1,
+  "intentAccuracy" : 45.0,
+  "metricsAccuracy" : 85.0,
+  "avgLatencyMs" : 141,
+  "totalTokensUsed" : 60900
+}]
