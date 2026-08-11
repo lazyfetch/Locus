@@ -231,18 +231,17 @@
     "expectedMetrics": ["holdings"],
     "difficulty": "medium",
     "category": "ner_messy"
-  }
-  ,
-  {
-    "query": "what is nav",
-    "expectedFundCodes": [],
-    "expectedIntent": "GENERAL",
-    "expectedMetrics": ["nav"],
-    "difficulty": "easy",
-    "category": "edge_case"
   },
   {
-    "query": "hdfc flexi cap fund risk",
+    "query": "HDFC Flexi Cap vs Nippon India Large Cap 3 year returns",
+    "expectedFundCodes": [118955, 118632],
+    "expectedIntent": "COMPARE_FUNDS",
+    "expectedMetrics": ["returns"],
+    "difficulty": "hard",
+    "category": "comparison"
+  },
+  {
+    "query": "Tell me the expense ratio of HDFC Flexi Cap",
     "expectedFundCodes": [118955],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
@@ -258,19 +257,75 @@
     "category": "ner_messy"
   },
   {
-    "query": "give me top 10 holdings of hdfc flexi cap",
+    "query": "Which HDFC fund has the best returns?",
+    "expectedFundCodes": [],
+    "expectedIntent": "GENERAL",
+    "expectedMetrics": ["returns"],
+    "difficulty": "hard",
+    "category": "comparison"
+  },
+  {
+    "query": "Compare HDFC Flexi Cap with its benchmark",
     "expectedFundCodes": [118955],
-    "expectedIntent": "HOLDINGS",
-    "expectedMetrics": ["holdings"],
+    "expectedIntent": "COMPARE_FUNDS",
+    "expectedMetrics": ["returns"],
+    "difficulty": "hard",
+    "category": "comparison"
+  },
+  {
+    "query": "Is Nippon India Large Cap better than HDFC Flexi Cap?",
+    "expectedFundCodes": [118632, 118955],
+    "expectedIntent": "COMPARE_FUNDS",
+    "expectedMetrics": ["returns"],
+    "difficulty": "medium",
+    "category": "comparison"
+  },
+  {
+    "query": "what is nav",
+    "expectedFundCodes": [],
+    "expectedIntent": "GENERAL",
+    "expectedMetrics": ["nav"],
+    "difficulty": "easy",
+    "category": "edge_case"
+  },
+  {
+    "query": "HDFC Flexi Cap",
+    "expectedFundCodes": [118955],
+    "expectedIntent": "GENERAL",
+    "expectedMetrics": [],
+    "difficulty": "hard",
+    "category": "edge_case"
+  },
+  {
+    "query": "Compare HDFC Flexi Cap and HDFC Small Cap",
+    "expectedFundCodes": [118955],
+    "expectedIntent": "COMPARE_FUNDS",
+    "expectedMetrics": ["returns"],
+    "difficulty": "hard",
+    "category": "comparison"
+  },
+  {
+    "query": "What is the AUM of Nippon India Large Cap?",
+    "expectedFundCodes": [118632],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": [],
     "difficulty": "medium",
     "category": "ner_messy"
   },
   {
-    "query": "how much has nippon india growth mid cap returned in 5 years",
-    "expectedFundCodes": [118668],
+    "query": "hdfc flexi cap fund risk",
+    "expectedFundCodes": [118955],
     "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": [],
+    "difficulty": "medium",
+    "category": "ner_messy"
+  },
+  {
+    "query": "ICICI Prudential Value vs Nippon India Large Cap",
+    "expectedFundCodes": [120323, 118632],
+    "expectedIntent": "COMPARE_FUNDS",
     "expectedMetrics": ["returns"],
     "difficulty": "hard",
-    "category": "ner_messy"
+    "category": "comparison"
   }
 ]
