@@ -36,6 +36,7 @@ public class EvaluationService {
         int metricsCorrect = 0;
         long totalLatency = 0;
         int totalTokens = 0;
+        double totalPrecisionAt1 = 0;
 
         for (EvalQuery q : queries) {
             long start = System.currentTimeMillis();
@@ -47,6 +48,7 @@ public class EvaluationService {
             List<Integer> retrievedCodes = plan.getSchemeCodes();
             double precision = computePrecision(retrievedCodes, q.getExpectedFundCodes());
             double recall = computeRecall(retrievedCodes, q.getExpectedFundCodes());
+            double precisionAt1 = computePrecisionAt1(retrievedCodes, q.getExpectedFundCodes());
             
             boolean intentMatch = q.getExpectedIntent() != null 
                 && q.getExpectedIntent().equals(plan.getIntent());
@@ -63,6 +65,7 @@ public class EvaluationService {
             
             totalPrecision += precision;
             totalRecall += recall;
+            totalPrecisionAt1 += precisionAt1;
             if (intentMatch) intentCorrect++;
             if (metricsMatch) metricsCorrect++;
             totalLatency += latency;
@@ -103,7 +106,8 @@ public class EvaluationService {
             totalTokens,
             results,
             precisionByCategory,
-            recallByDifficulty
+            recallByDifficulty,
+            totalPrecisionAt1 / n
         );
     }
 
@@ -117,5 +121,10 @@ public class EvaluationService {
         if (retrieved.isEmpty() || expected.isEmpty()) return 0;
         long correct = retrieved.stream().filter(expected::contains).count();
         return (double) correct / expected.size();
+    }
+
+    private double computePrecisionAt1(List<Integer> retrieved, List<Integer> expected) {
+        if (retrieved.isEmpty() || expected.isEmpty()) return 0;
+        return expected.contains(retrieved.get(0)) ? 1.0 : 0.0;
     }
 }
