@@ -16,4 +16,14 @@
   "metricsAccuracy" : 85.0,
   "avgLatencyMs" : 141,
   "totalTokensUsed" : 60900
+}, 
+{
+  "phase" : "Trained NER v3",
+  "avgLatencyMs" : 120,
+  "totalTokensUsed" : 60030,
+  "avgRecall" : 0.2,
+  "metricsAccuracy" : 85.0,
+  "intentAccuracy" : 60.0,
+  "avgPrecision" : 0.25,
+  "timestamp" : "2026-08-11"
 }]
