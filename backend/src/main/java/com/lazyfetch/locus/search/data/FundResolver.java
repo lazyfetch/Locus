@@ -46,24 +46,18 @@ public class FundResolver
     
     public List<Integer> resolveFunds(String text) 
     {
-        if (text == null || text.isBlank()) 
-        {
-            return List.of();
-        }
-
-        Set<Integer> found = new LinkedHashSet<>();
+        if (text == null || text.isBlank()) return List.of();
         String lower = text.toLowerCase();
-
+        Map<String, Integer> byCoreName = new LinkedHashMap<>();
         for (Map.Entry<String, Integer> entry : nameToSchemeCode.entrySet()) 
         {
-            String fundName = entry.getKey();  
-            if (isFundReferenced(fundName, lower)) 
+            if (isFundReferenced(entry.getKey(), lower)) 
             {
-                found.add(entry.getValue());
+                String core = entry.getKey().split("\\s*-\\s*")[0].trim();
+                byCoreName.putIfAbsent(core, entry.getValue());
             }
         }
-
-        return new ArrayList<>(found);
+        return new ArrayList<>(byCoreName.values());
     }
 
     private static final Set<String> SKIP_WORDS = Set.of(
@@ -75,39 +69,35 @@ public class FundResolver
     {
         String coreName = fundName.split("\\s*-\\s*")[0].trim();
         String[] fundWords = coreName.split("\\s+");
-        
-        String firstWord = null;
+
+        List<String> meaningful = new ArrayList<>();
         for (String w : fundWords) {
-            if (!SKIP_WORDS.contains(w.trim().toLowerCase())) {
-                firstWord = w.trim().toLowerCase();
-                break;
+            String word = w.trim().toLowerCase();
+            if (!word.isEmpty() && !SKIP_WORDS.contains(word)) {
+                meaningful.add(word);
             }
         }
-        if (firstWord == null) return false;
-        
-        for (int startIdx = 0; startIdx < fundWords.length; startIdx++) 
-        {
-            StringBuilder consecutive = new StringBuilder();
-            int meaningfulWords = 0;
-            
-            for (int i = startIdx; i < fundWords.length; i++) 
-            {
-                String word = fundWords[i].trim().toLowerCase();
-                if (word.isEmpty() || SKIP_WORDS.contains(word)) continue;
-                
-                if (consecutive.length() > 0) consecutive.append(" ");
-                consecutive.append(word);
-                meaningfulWords++;
-                
-                if (meaningfulWords >= 2 
-                    && consecutive.toString().contains(firstWord)
-                    && queryLower.contains(consecutive.toString())) 
-                {
-                    return true;
-                }
-            }
+        if (meaningful.isEmpty()) return false;
+
+        String fundHouse = meaningful.get(0);
+        if (!queryLower.contains(fundHouse)) {
+            return false;
         }
-        
-        return false;
+
+        int matched = 0;
+        for (String word : meaningful) {
+            if (queryLower.contains(word)) matched++;
+        }
+
+        double ratio = (double) matched / meaningful.size();
+        return matched >= 2 && ratio >= 0.85;
+    }
+
+    public List<Integer> resolveFundEntity(String entityText) {
+        return resolveFunds(entityText);
+    }
+
+    public Map<String, Integer> getAllFundsMap() {
+        return nameToSchemeCode;
     }
 }
