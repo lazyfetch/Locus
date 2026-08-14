@@ -26,4 +26,22 @@
   "intentAccuracy" : 60.0,
   "avgPrecision" : 0.25,
   "timestamp" : "2026-08-11"
+}, {
+  "phase" : "With NER (correct GT)",
+  "avgLatencyMs" : 180,
+  "totalTokensUsed" : 240510,
+  "avgRecall" : 0.65,
+  "metricsAccuracy" : 85.0,
+  "intentAccuracy" : 60.0,
+  "avgPrecision" : 0.1586873543123543,
+  "timestamp" : "2026-09-10"
+}, {
+  "phase" : "No NER (correct GT)",
+  "avgLatencyMs" : 145,
+  "totalTokensUsed" : 240510,
+  "avgRecall" : 0.65,
+  "metricsAccuracy" : 85.0,
+  "intentAccuracy" : 60.0,
+  "avgPrecision" : 0.1586873543123543,
+  "timestamp" : "2026-09-10"
 }]
