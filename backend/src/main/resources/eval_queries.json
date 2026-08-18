@@ -327,5 +327,53 @@
     "expectedMetrics": ["returns"],
     "difficulty": "hard",
     "category": "comparison"
-  }
+  },
+  {
+    "query": "give me top 10 holdings of hdfc flexi cap",
+    "expectedFundCodes": [118955],
+    "expectedIntent": "HOLDINGS",
+    "expectedMetrics": ["holdings"],
+    "difficulty": "medium",
+    "category": "ner_messy"
+  },
+  {
+    "query": "HDFC Flexi Cap exit load",
+    "expectedFundCodes": [118955],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": [],
+    "difficulty": "medium",
+    "category": "ner_messy"
+  },
+  {
+    "query": "how much has nippon india growth mid cap returned in 5 years",
+    "expectedFundCodes": [118668],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": ["returns"],
+    "difficulty": "hard",
+    "category": "ner_messy"
+  },
+  {
+    "query": "Compare HDFC Flexi Cap and Nippon India Large Cap and ICICI Prudential Value",
+    "expectedFundCodes": [118955, 118632, 120323],
+    "expectedIntent": "COMPARE_FUNDS",
+    "expectedMetrics": ["returns"],
+    "difficulty": "hard",
+    "category": "comparison"
+  },
+  {
+    "query": "HDFC Flexi Cap Fund - Direct Plan - Growth returns",
+    "expectedFundCodes": [118955],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": ["returns"],
+    "difficulty": "easy",
+    "category": "fund_lookup"
+  },
+  {
+    "query": "performance of hdfc flexi cap over 3 years",
+    "expectedFundCodes": [118955],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": ["returns"],
+    "difficulty": "medium",
+    "category": "ner_messy"
+  },
 ]
