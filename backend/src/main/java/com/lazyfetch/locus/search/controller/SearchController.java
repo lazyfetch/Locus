@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -28,13 +29,19 @@ import com.lazyfetch.locus.search.rag.RagService;
 import com.lazyfetch.locus.eval.EvaluationService;
 import com.lazyfetch.locus.eval.EvaluationReport;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.nio.file.*;
+
 import com.lazyfetch.locus.search.llm.LlmClient;
 import com.lazyfetch.locus.search.llm.LlmResponse;
 import com.fasterxml.jackson.core.type.TypeReference;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
+import com.lazyfetch.locus.search.ner.NerResult;
+import com.lazyfetch.locus.search.ner.NerService;
 
 @RestController
 public class SearchController {
@@ -51,12 +58,13 @@ public class SearchController {
     private final EvaluationService evaluationService;
     private final LlmClient llmClient;
     private final ObjectMapper mapper;
+    private final NerService nerService;
 
     public SearchController(SearchEngineService searchEngine, HybridSearchService hybridSearchService,
                         PgVectorService pgVectorService, MfQueryPlanner mfQueryPlanner, MfDataService mfDataService,
                         ContextBudgetAllocator budgetAllocator,
                         ContextCompressor contextCompressor,
-                        ContextAssembler contextAssembler, RagService ragService, EvaluationService evaluationService, LlmClient llmClient, ObjectMapper mapper) {
+                        ContextAssembler contextAssembler, RagService ragService, EvaluationService evaluationService, LlmClient llmClient, ObjectMapper mapper,NerService nerService ) {
         this.searchEngine = searchEngine;
         this.hybridSearchService = hybridSearchService;
         this.pgVectorService = pgVectorService;
@@ -69,6 +77,7 @@ public class SearchController {
         this.evaluationService = evaluationService;
         this.llmClient = llmClient;
         this.mapper = mapper;
+        this.nerService = nerService; 
     }
 
     @PostMapping("/index")
@@ -231,7 +240,7 @@ public class SearchController {
         entry.put("totalTokensUsed", report.getTotalTokensUsed());
         
         // Read existing history
-        Path historyPath = Paths.get("eval_history.json");
+        Path historyPath = Paths.get("src", "main", "resources", "eval_history.json");
         List<Map<String, Object>> history = new ArrayList<>();
         if (Files.exists(historyPath)) {
             history = mapper.readValue(historyPath.toFile(), new TypeReference<List<Map<String, Object>>>() {});
@@ -246,7 +255,7 @@ public class SearchController {
 
     @GetMapping("/eval/table")
     public String getEvolutionTable() throws Exception {
-        Path historyPath = Paths.get("eval_history.json");
+        Path historyPath = Paths.get("src", "main", "resources", "eval_history.json");
         if (!Files.exists(historyPath)) return "No history yet. Run /eval/save first.";
         
         List<Map<String, Object>> history = mapper.readValue(
@@ -274,7 +283,7 @@ public class SearchController {
 
     @GetMapping("/eval/compare")
     public Map<String, Object> compareWithVanilla(@RequestParam String q) throws Exception {
-        // Vanilla LLM
+        
         String vanillaPrompt = "Answer this financial question concisely. If you don't have current data, say so:\n\n" + q;
         long vanillaStart = System.currentTimeMillis();
         LlmResponse vanillaResponse = llmClient.chat(vanillaPrompt, q, 500);
@@ -303,6 +312,11 @@ public class SearchController {
         result.put("locus", locus);
         
         return result;
+    }
+
+    @GetMapping("/test-ner")
+    public NerResult testNer(@RequestParam String q) {
+        return nerService.extractEntities(q);
     }
 
 }
