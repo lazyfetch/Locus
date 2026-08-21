@@ -376,4 +376,76 @@
     "difficulty": "medium",
     "category": "ner_messy"
   },
+  {
+    "query": "Tell me about Parag Parikh Flexi Cap Fund",
+    "expectedFundCodes": [122639],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": [],
+    "difficulty": "hard",
+    "category": "fund_lookup"
+  },
+  {
+    "query": "What is the exit load for HDFC Flexi Cap?",
+    "expectedFundCodes": [118955],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": [],
+    "difficulty": "medium",
+    "category": "lexical_exact"
+  },
+  {
+    "query": "expense ratio of Nippon India Large Cap",
+    "expectedFundCodes": [118632],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": [],
+    "difficulty": "medium",
+    "category": "lexical_exact"
+  },
+  {
+    "query": "Who is the fund manager of HDFC Flexi Cap?",
+    "expectedFundCodes": [118955],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": [],
+    "difficulty": "medium",
+    "category": "lexical_exact"
+  },
+  {
+    "query": "benchmark index of Nippon India Growth Mid Cap",
+    "expectedFundCodes": [118668],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": [],
+    "difficulty": "medium",
+    "category": "lexical_exact"
+  },
+  {
+    "query": "minimum SIP amount for ICICI Prudential Value Fund",
+    "expectedFundCodes": [120323],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": [],
+    "difficulty": "medium",
+    "category": "lexical_exact"
+  },
+  {
+    "query": "HDFC Flexi Cap fund manager name",
+    "expectedFundCodes": [118955],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": [],
+    "difficulty": "easy",
+    "category": "lexical_exact"
+  },
+  {
+    "query": "exit load and expense ratio HDFC Flexi Cap",
+    "expectedFundCodes": [118955],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": [],
+    "difficulty": "hard",
+    "category": "lexical_exact"
+  },
+  {
+    "query": "Nippon India Large Cap fund manager and benchmark",
+    "expectedFundCodes": [118632],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": [],
+    "difficulty": "hard",
+    "category": "lexical_exact"
+  }
 ]
