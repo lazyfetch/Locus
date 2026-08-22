@@ -62,5 +62,24 @@
   "intentAccuracy" : 66.66666666666666,
   "avgPrecision" : 0.6215277777777778,
   "timestamp" : "2026-09-10"
-}
-]
+}, 
+{
+  "phase" : "Retrained NER v4",
+  "avgLatencyMs" : 139,
+  "totalTokensUsed" : 42600,
+  "avgRecall" : 0.7326388888888888,
+  "metricsAccuracy" : 79.16666666666666,
+  "intentAccuracy" : 66.66666666666666,
+  "avgPrecision" : 0.6656746031746031,
+  "timestamp" : "2026-09-10"
+}, 
+{
+  "phase" : "No NER (v4)",
+  "avgLatencyMs" : 73,
+  "totalTokensUsed" : 43340,
+  "avgRecall" : 0.6805555555555557,
+  "metricsAccuracy" : 79.16666666666666,
+  "intentAccuracy" : 66.66666666666666,
+  "avgPrecision" : 0.6215277777777778,
+  "timestamp" : "2026-09-10"
+} ]
