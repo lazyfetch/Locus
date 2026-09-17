@@ -84,3 +84,24 @@ data_pipeline/**/load_*_schemes.py
 timeline.txt
 backend/context.txt
 plans/frontend-backend-integration-analysis.md
+backend/models/ner/
+data_pipeline/data/val.jsonl
+data_pipeline/data/train.jsonl
+data_pipeline/data/test.jsonl
+data_pipeline/data/raw_dataset.jsonl
+data_pipeline/ner_bio.jsonl
+data_pipeline/data/ner_bio.jsonl
+data_pipeline/data/locus-ner-data.zip
+data_pipeline/validate_eval.py
+data_pipeline/val.jsonl
+data_pipeline/train.jsonl
+data_pipeline/test.jsonl
+data_pipeline/split_dataset.py
+data_pipeline/raw_dataset.jsonl
+data_pipeline/locus-ner-data.zip
+data_pipeline/inspect_dataset.py
+data_pipeline/generate_dataset.py
+data_pipeline/download_ner_model.py
+data_pipeline/create_to_bio.py
+current_changes.patch
+ck --full --no-reflogs --unreachable

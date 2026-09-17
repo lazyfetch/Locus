@@ -18,7 +18,7 @@
 
     <properties>
         <java.version>21</java.version>
-        <onnxruntime.version>1.17.1</onnxruntime.version>
+        <onnxruntime.version>1.19.2</onnxruntime.version>
     </properties>
 
     <dependencies>
@@ -108,7 +108,7 @@
         <dependency>
             <groupId>com.microsoft.onnxruntime</groupId>
             <artifactId>onnxruntime</artifactId>
-            <version>1.17.1</version>
+            <version>1.19.2</version>
         </dependency>
 
         <!--  DJL tokenizers -->
