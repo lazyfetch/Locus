@@ -5,14 +5,19 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.lazyfetch.locus.search.tokens.TokenCounter;
 
 @Service
 public class ContextCompressor {
 
+    private final TokenCounter tokenCounter;
+
+    public ContextCompressor(TokenCounter tokenCounter) {
+        this.tokenCounter = tokenCounter;
+    }
 
     public int estimateTokens(String text) {
-        if (text == null || text.isEmpty()) return 0;
-        return text.length() / 4;
+        return tokenCounter.count(text);   // was: text.length() / 4
     }
 
     public List<Map<String, Object>> compress(List<Map<String, Object>> items, int budget, String textKey, int maxItems) 
@@ -96,30 +101,23 @@ public class ContextCompressor {
 
     private Map<String, Object> truncateItem(Map<String, Object> item, String textKey, int maxTokens) 
     {
-        if (textKey == null || !item.containsKey(textKey)) 
-        {
-            return null;
-        }
-        
+        if (textKey == null || !item.containsKey(textKey)) return null;
+
         String text = (String) item.get(textKey);
-        int maxChars = maxTokens * 4;  
-        
-        if (text.length() <= maxChars) 
-        {
-            return item;  
+        if (tokenCounter.count(text) <= maxTokens) return item;   // already fits
+
+        int lo = 0, hi = text.length();
+        while (lo < hi) {
+            int mid = (lo + hi + 1) / 2;
+            if (tokenCounter.count(text.substring(0, mid)) <= maxTokens) lo = mid;
+            else hi = mid - 1;
         }
-        
-        String truncated = text.substring(0, Math.min(maxChars, text.length()));
+
+        String truncated = text.substring(0, lo);
         int lastPeriod = truncated.lastIndexOf('.');
-        if (lastPeriod > maxChars / 2) 
-        {
-            truncated = truncated.substring(0, lastPeriod + 1);
-        } 
-        else 
-        {
-            truncated += "...";
-        }
-        
+        if (lastPeriod > lo / 2) truncated = truncated.substring(0, lastPeriod + 1);
+        else truncated += "...";
+
         Map<String, Object> result = new HashMap<>(item);
         result.put(textKey, truncated);
         return result;

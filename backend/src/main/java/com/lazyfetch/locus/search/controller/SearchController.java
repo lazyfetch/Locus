@@ -42,6 +42,7 @@ import java.nio.file.Paths;
 
 import com.lazyfetch.locus.search.ner.NerResult;
 import com.lazyfetch.locus.search.ner.NerService;
+import com.lazyfetch.locus.search.tokens.TokenCounter;
 
 @RestController
 public class SearchController {
@@ -59,12 +60,13 @@ public class SearchController {
     private final LlmClient llmClient;
     private final ObjectMapper mapper;
     private final NerService nerService;
+    private final TokenCounter tokenCounter;
 
     public SearchController(SearchEngineService searchEngine, HybridSearchService hybridSearchService,
                         PgVectorService pgVectorService, MfQueryPlanner mfQueryPlanner, MfDataService mfDataService,
                         ContextBudgetAllocator budgetAllocator,
                         ContextCompressor contextCompressor,
-                        ContextAssembler contextAssembler, RagService ragService, EvaluationService evaluationService, LlmClient llmClient, ObjectMapper mapper,NerService nerService ) {
+                        ContextAssembler contextAssembler, RagService ragService, EvaluationService evaluationService, LlmClient llmClient, ObjectMapper mapper,NerService nerService, TokenCounter tokenCounter) {
         this.searchEngine = searchEngine;
         this.hybridSearchService = hybridSearchService;
         this.pgVectorService = pgVectorService;
@@ -78,6 +80,7 @@ public class SearchController {
         this.llmClient = llmClient;
         this.mapper = mapper;
         this.nerService = nerService; 
+        this.tokenCounter=tokenCounter;
     }
 
     @PostMapping("/index")
@@ -197,7 +200,9 @@ public class SearchController {
         // return
         Map<String, Object> result = new HashMap<>();
         result.put("prompt", prompt);
-        result.put("estimatedTokens", prompt.length() / 4);
+        // result.put("estimatedTokens", prompt.length() / 4);
+        result.put("charHeuristicTokens", prompt.length() / 4);
+        result.put("calibratedTokens", tokenCounter.countForProvider(prompt));
         result.put("budgetAllocation", Map.of(
             "history", allocation.getHistoryTokens(),
             "data", allocation.getDataTokens(),
@@ -317,6 +322,27 @@ public class SearchController {
     @GetMapping("/test-ner")
     public NerResult testNer(@RequestParam String q) {
         return nerService.extractEntities(q);
+    }
+
+    @GetMapping("/debug-tokens-compare")
+    public Map<String, Object> debugTokensCompare(@RequestParam String q) {
+        int rawCount = tokenCounter.count(q);
+        int calibrated = tokenCounter.countForProvider(q);
+
+        LlmResponse resp = llmClient.chat("You are a helpful assistant.", q, 16);
+        int providerCount = resp.getInputTokens();
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("text", q);
+        result.put("rawJtokkitTokens", rawCount);
+        result.put("calibratedTokens", calibrated);
+        result.put("providerPromptTokens", providerCount);
+        result.put("rawErrorPct", providerCount == 0 ? -1
+            : Math.abs(rawCount - providerCount) * 100.0 / providerCount);
+        result.put("calibratedErrorPct", providerCount == 0 ? -1
+            : Math.abs(calibrated - providerCount) * 100.0 / providerCount);
+        result.put("providerRawContent", resp.getContent());
+        return result;
     }
 
 }
