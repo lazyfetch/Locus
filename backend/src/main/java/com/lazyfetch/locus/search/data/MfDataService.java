@@ -74,7 +74,8 @@ public class MfDataService
     {
         String sql = """
                 SELECT scheme_code, scheme_name, fund_house, 
-                       scheme_type, scheme_category
+                       scheme_type, scheme_category,
+                       expense_ratio_direct, exit_load, fund_managers, benchmark_index, aum_cr, nav_regular_growth
                 FROM mf_scheme
                 WHERE scheme_code=?
                 """;

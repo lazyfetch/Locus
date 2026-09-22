@@ -99,4 +99,14 @@
   "chunkRelevance" : 45.65217391304348,
   "avgPrecision" : 0.7045068027210883,
   "timestamp" : "2026-09-22"
+}, {
+  "phase" : "Lucene A-B Null Result",
+  "avgLatencyMs" : 255,
+  "totalTokensUsed" : 41550,
+  "avgRecall" : 0.8740157480314961,
+  "metricsAccuracy" : 96.8503937007874,
+  "intentAccuracy" : 70.07874015748031,
+  "chunkRelevance" : 42.64705882352941,
+  "avgPrecision" : 0.694225721784777,
+  "timestamp" : "2026-09-23"
 } ]

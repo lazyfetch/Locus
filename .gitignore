@@ -105,3 +105,4 @@ data_pipeline/download_ner_model.py
 data_pipeline/create_to_bio.py
 current_changes.patch
 ck --full --no-reflogs --unreachable
+data_pipeline/generate_eval_queries.py

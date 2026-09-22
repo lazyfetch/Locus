@@ -9,6 +9,7 @@ import org.apache.lucene.store.ByteBuffersDirectory;
 import org.apache.lucene.store.Directory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import org.apache.lucene.queryparser.classic.QueryParser;
 
 import jakarta.annotation.PostConstruct;
 import java.util.*;
@@ -26,8 +27,8 @@ public class LuceneChunkService {
 
     @PostConstruct
     public void buildIndex() throws Exception {
-        this.directory = new ByteBuffersDirectory();   
-        this.analyzer = new ChunkAnalyzer();           
+        this.directory = new ByteBuffersDirectory();
+        this.analyzer = new ChunkAnalyzer();
 
         IndexWriterConfig config = new IndexWriterConfig(analyzer);
         try (IndexWriter writer = new IndexWriter(directory, config)) {
@@ -37,8 +38,8 @@ public class LuceneChunkService {
             for (Map<String, Object> row : rows) {
                 Document doc = new Document();
                 doc.add(new StringField("id", String.valueOf(row.get("id")), Field.Store.YES));
-                doc.add(new IntPoint("scheme_code", (Integer) row.get("scheme_code")));
-                doc.add(new StoredField("scheme_code", (Integer) row.get("scheme_code")));
+                doc.add(new StringField("scheme_code", 
+                        String.valueOf(row.get("scheme_code")), Field.Store.YES));   
                 doc.add(new StringField("section_type", 
                         String.valueOf(row.get("section_type")), Field.Store.YES));
                 doc.add(new TextField("chunk_text", 
@@ -54,7 +55,11 @@ public class LuceneChunkService {
             IndexSearcher searcher = new IndexSearcher(reader);
 
             QueryParser parser = new QueryParser("chunk_text", analyzer);
+            parser.setDefaultOperator(QueryParser.Operator.AND);   
             Query textQuery = parser.parse(QueryParser.escape(query));
+
+            String escaped = QueryParser.escape(query);
+            Query textQuery2 = parser.parse("\"" + escaped + "\" OR " + escaped);
 
             Query finalQuery = textQuery;
             if (schemeCodes != null && !schemeCodes.isEmpty()) {
@@ -84,7 +89,8 @@ public class LuceneChunkService {
     private Query buildSchemeFilter(List<Integer> codes) {
         BooleanQuery.Builder b = new BooleanQuery.Builder();
         for (Integer c : codes) {
-            b.add(IntPoint.newExactQuery("scheme_code", c), BooleanClause.Occur.SHOULD);
+            b.add(new TermQuery(new Term("scheme_code", String.valueOf(c))), 
+                  BooleanClause.Occur.SHOULD); 
         }
         return b.build();
     }

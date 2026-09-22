@@ -6,11 +6,14 @@ import com.lazyfetch.locus.search.pgvector.PgVectorService;
 import com.lazyfetch.locus.search.planner.MfQueryPlanner;
 import com.lazyfetch.locus.search.planner.RetrievalPlan;
 import com.lazyfetch.locus.records.VectorSearchResult;
+
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
+
+import com.lazyfetch.locus.search.lucene.LuceneChunkService;
 
 @Service
 public class HybridSearchService {
@@ -18,17 +21,25 @@ public class HybridSearchService {
     private final MfQueryPlanner queryPlanner;
     private final MfDataService mfDataService;
     private final PgVectorService pgVectorService;
+    private final LuceneChunkService luceneChunkService;   // inject
 
     public HybridSearchService(
             MfQueryPlanner queryPlanner,
             MfDataService mfDataService,
-            PgVectorService pgVectorService) {
+            PgVectorService pgVectorService,
+            LuceneChunkService luceneChunkService) 
+    {
         this.queryPlanner = queryPlanner;
         this.mfDataService = mfDataService;
         this.pgVectorService = pgVectorService;
+        this.luceneChunkService = luceneChunkService;
     }
 
     public HybridSearchResponse hybridSearch(String query, int topK) throws Exception {
+        return hybridSearch(query, topK, true);
+    }
+
+    public HybridSearchResponse hybridSearch(String query, int topK, List<Integer> previousCodes) throws Exception {
         RetrievalPlan plan = queryPlanner.plan(query);
         List<Integer> schemeCodes = plan.getSchemeCodes();
         String intent = plan.getIntent();
@@ -94,15 +105,28 @@ public class HybridSearchService {
                 }
             });
 
+        CompletableFuture<List<Map<String, Object>>> luceneFuture =
+            CompletableFuture.supplyAsync(() -> {
+                if (!true) return new ArrayList<>();   
+                try {
+                    return luceneChunkService.search(query, topK * 2, 
+                            schemeCodes.isEmpty() ? null : schemeCodes);
+                } catch (Exception e) {
+                    return new ArrayList<>();
+                }
+            });
+
         List<Map<String, Object>> structuredResults = structuredFuture.get();
         List<Map<String, Object>> vectorResults = vectorFuture.get();
+        List<Map<String, Object>> luceneResults = luceneFuture.get();
 
-        return new HybridSearchResponse(plan, structuredResults, vectorResults);
+        List<Map<String, Object>> fused = fuseRrf(vectorResults, luceneResults, topK);
+
+        return new HybridSearchResponse(plan, structuredResults, fused);
     }
 
-    public HybridSearchResponse hybridSearch(String query, int topK, List<Integer> previousCodes) throws Exception 
-    {
-        RetrievalPlan plan = queryPlanner.plan(query, previousCodes);
+    public HybridSearchResponse hybridSearch(String query, int topK, boolean useLucene) throws Exception {
+        RetrievalPlan plan = queryPlanner.plan(query);
         List<Integer> schemeCodes = plan.getSchemeCodes();
         String intent = plan.getIntent();
         List<String> metrics = plan.getMetricTypes();
@@ -167,9 +191,59 @@ public class HybridSearchService {
                 }
             });
 
+        CompletableFuture<List<Map<String, Object>>> luceneFuture =
+            CompletableFuture.supplyAsync(() -> {
+                if (!useLucene) return new ArrayList<>();   
+                try {
+                    return luceneChunkService.search(query, topK * 2, 
+                            schemeCodes.isEmpty() ? null : schemeCodes);
+                } catch (Exception e) {
+                    System.err.println("Lucene search failed: " + e.getMessage());
+                    return new ArrayList<>();
+                }
+            });
+
         List<Map<String, Object>> structuredResults = structuredFuture.get();
         List<Map<String, Object>> vectorResults = vectorFuture.get();
+        List<Map<String, Object>> luceneResults = luceneFuture.get();
 
-        return new HybridSearchResponse(plan, structuredResults, vectorResults);
+        List<Map<String, Object>> fused = fuseRrf(vectorResults, luceneResults, topK);
+
+        return new HybridSearchResponse(plan, structuredResults, fused);
     }
-}
+
+    private List<Map<String, Object>> fuseRrf(
+            List<Map<String, Object>> vectorResults,
+            List<Map<String, Object>> luceneResults,
+            int topK) {
+
+        final int K = 60;
+        Map<String, Double> scores = new HashMap<>();
+        Map<String, Map<String, Object>> byId = new HashMap<>();
+
+        for (int i = 0; i < vectorResults.size(); i++) {
+            Map<String, Object> r = vectorResults.get(i);
+            String id = String.valueOf(r.get("id"));
+            scores.merge(id, 1.0 / (K + i + 1), Double::sum);
+            byId.putIfAbsent(id, r);
+        }
+
+        
+        for (int i = 0; i < luceneResults.size(); i++) {
+            Map<String, Object> r = luceneResults.get(i);
+            String id = String.valueOf(r.get("id"));
+            scores.merge(id, 1.0 / (K + i + 1), Double::sum);
+            byId.putIfAbsent(id, r);
+        }
+
+        return scores.entrySet().stream()
+            .sorted((a, b) -> Double.compare(b.getValue(), a.getValue()))
+            .limit(topK)
+            .map(e -> {
+                Map<String, Object> m = new HashMap<>(byId.get(e.getKey()));
+                m.put("rrf_score", e.getValue());
+                return m;
+            })
+            .collect(Collectors.toList());
+    }
+}       

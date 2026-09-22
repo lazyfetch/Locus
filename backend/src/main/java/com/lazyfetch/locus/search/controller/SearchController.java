@@ -44,6 +44,9 @@ import com.lazyfetch.locus.search.ner.NerResult;
 import com.lazyfetch.locus.search.ner.NerService;
 import com.lazyfetch.locus.search.tokens.TokenCounter;
 
+import com.lazyfetch.locus.search.lucene.LuceneChunkService;
+import com.lazyfetch.locus.search.lucene.ChunkAnalyzer;
+
 @RestController
 public class SearchController {
 
@@ -61,12 +64,13 @@ public class SearchController {
     private final ObjectMapper mapper;
     private final NerService nerService;
     private final TokenCounter tokenCounter;
+    private final LuceneChunkService luceneChunkService;
 
     public SearchController(SearchEngineService searchEngine, HybridSearchService hybridSearchService,
                         PgVectorService pgVectorService, MfQueryPlanner mfQueryPlanner, MfDataService mfDataService,
                         ContextBudgetAllocator budgetAllocator,
                         ContextCompressor contextCompressor,
-                        ContextAssembler contextAssembler, RagService ragService, EvaluationService evaluationService, LlmClient llmClient, ObjectMapper mapper,NerService nerService, TokenCounter tokenCounter) {
+                        ContextAssembler contextAssembler, RagService ragService, EvaluationService evaluationService, LlmClient llmClient, ObjectMapper mapper,NerService nerService, TokenCounter tokenCounter, LuceneChunkService luceneChunkService) {
         this.searchEngine = searchEngine;
         this.hybridSearchService = hybridSearchService;
         this.pgVectorService = pgVectorService;
@@ -81,6 +85,7 @@ public class SearchController {
         this.mapper = mapper;
         this.nerService = nerService; 
         this.tokenCounter=tokenCounter;
+        this.luceneChunkService = luceneChunkService;
     }
 
     @PostMapping("/index")
@@ -127,6 +132,8 @@ public class SearchController {
 
         List<String> customTokens = getTokens(new CustomAnalyzer(), text);
         result.put("CustomAnalyzer", customTokens);
+
+        result.put("ChunkAnalyzer", getTokens(new ChunkAnalyzer(), text));
 
         return result;
     }
@@ -225,9 +232,10 @@ public class SearchController {
     }
 
     @GetMapping("/eval/baseline")
-    public EvaluationReport runBaseline() throws Exception {
-        return evaluationService.evaluate();
-    }
+    public EvaluationReport runBaseline(
+            @RequestParam(defaultValue = "true") boolean useLucene) throws Exception {
+                return evaluationService.evaluate(useLucene);
+        }
 
     @GetMapping("/eval/save")
     public Map<String, Object> saveBaseline(@RequestParam String phase) throws Exception {
@@ -345,6 +353,17 @@ public class SearchController {
             : Math.abs(calibrated - providerCount) * 100.0 / providerCount);
         result.put("providerRawContent", resp.getContent());
         return result;
+    }
+
+    @GetMapping("/test-lucene")
+    public List<Map<String, Object>> testLucene(@RequestParam String q) throws Exception {
+        return luceneChunkService.search(q, 10, null);
+    }
+
+    @GetMapping("/test-lucene-filtered")
+    public List<Map<String, Object>> testLuceneFiltered(
+            @RequestParam String q, @RequestParam Integer code) throws Exception {
+        return luceneChunkService.search(q, 10, List.of(code));
     }
 
 }

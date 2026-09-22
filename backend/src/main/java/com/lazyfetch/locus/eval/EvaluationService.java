@@ -27,6 +27,10 @@ public class EvaluationService {
     }
 
     public EvaluationReport evaluate() throws Exception {
+        return evaluate(true);   // default: Lucene on
+    }
+
+    public EvaluationReport evaluate(boolean useLucene) throws Exception {
         List<EvalQuery> queries = loadQueries();
         List<EvalResult> results = new ArrayList<>();
         
@@ -43,7 +47,7 @@ public class EvaluationService {
 
         for (EvalQuery q : queries) {
             long start = System.currentTimeMillis();
-            HybridSearchResponse response = hybridSearchService.hybridSearch(q.getQuery(), 10);
+            HybridSearchResponse response = hybridSearchService.hybridSearch(q.getQuery(), 10, useLucene);
             long latency = System.currentTimeMillis() - start;
             
             RetrievalPlan plan = response.getPlan();
