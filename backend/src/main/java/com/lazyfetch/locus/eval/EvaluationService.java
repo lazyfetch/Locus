@@ -68,7 +68,8 @@ public class EvaluationService {
 
             if (expectedKeywords != null && !expectedKeywords.isEmpty()) {
                 String chunkText = response.getUnstructured().stream()
-                    .map(c -> String.valueOf(c.getOrDefault("chunk_text", "")))
+                    .map(c -> String.valueOf(c.getOrDefault("chunk_text_full", 
+                    c.getOrDefault("chunk_text", ""))))   // prefer full, fall back
                     .collect(Collectors.joining(" "))
                     .toLowerCase();
 

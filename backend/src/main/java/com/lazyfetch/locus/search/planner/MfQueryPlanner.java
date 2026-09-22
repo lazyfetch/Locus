@@ -24,6 +24,8 @@ public class MfQueryPlanner
         Pattern.compile("(?i)\\b(nav|price|value today|latest nav|worth|valued|current value|today's nav)\\b");
     private static final Pattern COMPARE_PATTERN = 
         Pattern.compile("(?i)\\b(compare|comparison|comparing|vs|versus|difference|better|which|between|outperform|beat)\\b");
+    private static final Pattern FUND_FACTS_PATTERN = 
+        Pattern.compile("(?i)\\b(fund manager|expense ratio|exit load|aum|benchmark|risk ratio|sharpe|alpha|beta|sip|minimum)\\b");
 
     private final FundResolver fundResolver;
     private final NerService nerService;
@@ -86,6 +88,7 @@ public class MfQueryPlanner
         if (HOLDING_PATTERN.matcher(query).find()) return "HOLDINGS";
         if (RETURN_PATTERN.matcher(query).find()) return "FUND_DETAILS";
         if (NAV_PATTERN.matcher(query).find()) return "NAV";
+        if (FUND_FACTS_PATTERN.matcher(query).find()) return "FUND_DETAILS";
         return "GENERAL";
     }
 
@@ -101,12 +104,12 @@ public class MfQueryPlanner
         if (nerMetrics.contains("holdings")) return "HOLDINGS";
         if (nerMetrics.contains("nav")) return "NAV";
 
-       
         if (COMPARE_PATTERN.matcher(query).find()) return "COMPARE_FUNDS";
 
         if (HOLDING_PATTERN.matcher(query).find()) return "HOLDINGS";
         if (RETURN_PATTERN.matcher(query).find()) return "FUND_DETAILS";
         if (NAV_PATTERN.matcher(query).find()) return "NAV";
+        if (FUND_FACTS_PATTERN.matcher(query).find()) return "FUND_DETAILS";
         return "GENERAL";
     }
 

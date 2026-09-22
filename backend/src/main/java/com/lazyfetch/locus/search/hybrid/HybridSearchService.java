@@ -83,6 +83,7 @@ public class HybridSearchService {
                         map.put("section_type", r.sectionType());
                         String text = r.chunkText();
                         map.put("chunk_text", text.length() > 300 ? text.substring(0, 300) + "..." : text);
+                        map.put("chunk_text_full", text);  
                         map.put("distance", r.distance());
                         map.put("similarity", 1.0 - (r.distance() / 2.0));
                         return map;
@@ -155,6 +156,7 @@ public class HybridSearchService {
                         map.put("section_type", r.sectionType());
                         String text = r.chunkText();
                         map.put("chunk_text", text.length() > 300 ? text.substring(0, 300) + "..." : text);
+                        map.put("chunk_text_full", text);  
                         map.put("distance", r.distance());
                         map.put("similarity", 1.0 - (r.distance() / 2.0));
                         return map;
