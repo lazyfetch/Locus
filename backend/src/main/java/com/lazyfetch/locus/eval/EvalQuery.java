@@ -7,6 +7,7 @@ public class EvalQuery {
     private List<Integer> expectedFundCodes;
     private String expectedIntent;
     private List<String> expectedMetrics;
+    private List<String> expectedKeywords;   // NEW
     private String difficulty;  // "easy", "medium", "hard"
     private String category;    // "fund_lookup", "comparison", "follow_up", "edge_case"
 
@@ -23,4 +24,6 @@ public class EvalQuery {
     public void setExpectedIntent(String intent) { this.expectedIntent = intent; }
     public List<String> getExpectedMetrics() { return expectedMetrics; }
     public void setExpectedMetrics(List<String> metrics) { this.expectedMetrics = metrics; }
+    public List<String> getExpectedKeywords() { return expectedKeywords; }          // NEW
+    public void setExpectedKeywords(List<String> keywords) { this.expectedKeywords = keywords; }  // NEW
 }

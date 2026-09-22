@@ -243,6 +243,7 @@ public class SearchController {
         entry.put("metricsAccuracy", report.getMetricsAccuracy());
         entry.put("avgLatencyMs", report.getAvgLatencyMs());
         entry.put("totalTokensUsed", report.getTotalTokensUsed());
+        entry.put("chunkRelevance", report.getChunkRelevanceRate());
         
         // Read existing history
         Path historyPath = Paths.get("src", "main", "resources", "eval_history.json");
@@ -268,14 +269,15 @@ public class SearchController {
         
         StringBuilder sb = new StringBuilder();
         sb.append("# Performance Evolution\n\n");
-        sb.append("| Phase | Precision | Recall | Intent Acc | Metrics Acc | Latency (ms) | Tokens |\n");
-        sb.append("|---|---|---|---|---|---|---|\n");
-        
+        sb.append("| Phase | Precision | Recall | ChunkRel | Intent Acc | Metrics Acc | Latency (ms) | Tokens |\n");
+        sb.append("|---|---|---|---|---|---|---|---|\n");
+
         for (var entry : history) {
-            sb.append(String.format("| %s | %.2f | %.2f | %.1f%% | %.1f%% | %d | %d |\n",
+            sb.append(String.format("| %s | %.2f | %.2f | %.1f%% | %.1f%% | %.1f%% | %d | %d |\n",
                 entry.get("phase"),
                 (double) entry.get("avgPrecision"),
                 (double) entry.get("avgRecall"),
+                entry.get("chunkRelevance") != null ? (double) entry.get("chunkRelevance") : 0.0,
                 (double) entry.get("intentAccuracy"),
                 (double) entry.get("metricsAccuracy"),
                 ((Number) entry.get("avgLatencyMs")).longValue(),

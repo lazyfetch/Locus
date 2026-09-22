@@ -16,8 +16,7 @@
   "metricsAccuracy" : 85.0,
   "avgLatencyMs" : 141,
   "totalTokensUsed" : 60900
-}, 
-{
+}, {
   "phase" : "Trained NER v3",
   "avgLatencyMs" : 120,
   "totalTokensUsed" : 60030,
@@ -62,8 +61,7 @@
   "intentAccuracy" : 66.66666666666666,
   "avgPrecision" : 0.6215277777777778,
   "timestamp" : "2026-09-10"
-}, 
-{
+}, {
   "phase" : "Retrained NER v4",
   "avgLatencyMs" : 139,
   "totalTokensUsed" : 42600,
@@ -72,8 +70,7 @@
   "intentAccuracy" : 66.66666666666666,
   "avgPrecision" : 0.6656746031746031,
   "timestamp" : "2026-09-10"
-}, 
-{
+}, {
   "phase" : "No NER (v4)",
   "avgLatencyMs" : 73,
   "totalTokensUsed" : 43340,
@@ -82,4 +79,14 @@
   "intentAccuracy" : 66.66666666666666,
   "avgPrecision" : 0.6215277777777778,
   "timestamp" : "2026-09-10"
+}, {
+  "phase" : "Baseline with ChunkRel",
+  "avgLatencyMs" : 703,
+  "totalTokensUsed" : 47260,
+  "avgRecall" : 0.7886904761904762,
+  "metricsAccuracy" : 85.71428571428571,
+  "intentAccuracy" : 55.35714285714286,
+  "chunkRelevance" : 26.08695652173913,
+  "avgPrecision" : 0.7045068027210883,
+  "timestamp" : "2026-09-22"
 } ]

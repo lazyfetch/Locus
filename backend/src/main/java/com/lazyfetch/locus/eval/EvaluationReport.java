@@ -14,6 +14,7 @@ public class EvaluationReport {
     private final Map<String, Double> precisionByCategory;
     private final Map<String, Double> recallByDifficulty;
     private final double avgPrecisionAt1;
+    private final double chunkRelevanceRate;
 
     public EvaluationReport(
         double avgPrecision,
@@ -25,7 +26,7 @@ public class EvaluationReport {
         List<EvalResult> results,
         Map<String, Double> precisionByCategory,
         Map<String, Double> recallByDifficulty,
-        double avgPrecisionAt1) {
+        double avgPrecisionAt1, double chunkRelevanceRate) {
         this.avgPrecision = avgPrecision;
         this.avgRecall = avgRecall;
         this.intentAccuracy = intentAccuracy;
@@ -36,6 +37,7 @@ public class EvaluationReport {
         this.precisionByCategory = precisionByCategory;
         this.recallByDifficulty = recallByDifficulty;
         this.avgPrecisionAt1 = avgPrecisionAt1;
+        this.chunkRelevanceRate = chunkRelevanceRate;
     }
 
 
@@ -49,4 +51,5 @@ public class EvaluationReport {
     public Map<String, Double> getPrecisionByCategory() { return precisionByCategory; }
     public Map<String, Double> getRecallByDifficulty() { return recallByDifficulty; }
     public double getAvgPrecisionAt1() { return avgPrecisionAt1; }
+    public double getChunkRelevanceRate() { return chunkRelevanceRate; }
 }

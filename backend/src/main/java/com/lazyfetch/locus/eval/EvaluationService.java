@@ -38,6 +38,9 @@ public class EvaluationService {
         int totalTokens = 0;
         double totalPrecisionAt1 = 0;
 
+        int applicableCount = 0;
+        int relevantCount = 0;
+
         for (EvalQuery q : queries) {
             long start = System.currentTimeMillis();
             HybridSearchResponse response = hybridSearchService.hybridSearch(q.getQuery(), 10);
@@ -60,8 +63,25 @@ public class EvaluationService {
             int tokens = response.getStructured().size() * 20 
                        + response.getUnstructured().size() * 50;
             
-            results.add(new EvalResult(q.getQuery(), precision, recall, intentMatch, metricsMatch, latency, tokens, 
-                                       q.getDifficulty(), q.getCategory()));
+            List<String> expectedKeywords = q.getExpectedKeywords();  
+            boolean chunkRelevant = true;  
+
+            if (expectedKeywords != null && !expectedKeywords.isEmpty()) {
+                String chunkText = response.getUnstructured().stream()
+                    .map(c -> String.valueOf(c.getOrDefault("chunk_text", "")))
+                    .collect(Collectors.joining(" "))
+                    .toLowerCase();
+
+                chunkRelevant = expectedKeywords.stream()
+                    .anyMatch(k -> chunkText.contains(k.toLowerCase()));
+
+                applicableCount++;
+                if (chunkRelevant) relevantCount++;
+            }
+
+            results.add(new EvalResult(q.getQuery(), precision, recall, intentMatch, metricsMatch, 
+                           chunkRelevant, latency, tokens,
+                           q.getDifficulty(), q.getCategory()));
             
             totalPrecision += precision;
             totalRecall += recall;
@@ -97,6 +117,9 @@ public class EvaluationService {
             recallByDifficulty.put(entry.getKey(), avg);
         }
         
+        double chunkRelevanceRate = applicableCount == 0 ? 0.0
+            : relevantCount * 100.0 / applicableCount;
+
         return new EvaluationReport(
             totalPrecision / n,
             totalRecall / n,
@@ -107,7 +130,8 @@ public class EvaluationService {
             results,
             precisionByCategory,
             recallByDifficulty,
-            totalPrecisionAt1 / n
+            totalPrecisionAt1 / n,
+            chunkRelevanceRate
         );
     }
 

@@ -4,6 +4,7 @@
     "expectedFundCodes": [118955],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": ["returns"],
+    "expectedKeywords": ["return", "1Y", "3Y", "5Y"],
     "difficulty": "easy",
     "category": "fund_lookup"
   },
@@ -12,6 +13,7 @@
     "expectedFundCodes": [118632],
     "expectedIntent": "HOLDINGS",
     "expectedMetrics": ["holdings"],
+    "expectedKeywords": ["holding", "allocation"],
     "difficulty": "easy",
     "category": "fund_lookup"
   },
@@ -20,6 +22,7 @@
     "expectedFundCodes": [118955, 118632],
     "expectedIntent": "COMPARE_FUNDS",
     "expectedMetrics": ["returns"],
+    "expectedKeywords": ["return"],
     "difficulty": "easy",
     "category": "comparison"
   },
@@ -28,6 +31,7 @@
     "expectedFundCodes": [118668],
     "expectedIntent": "NAV",
     "expectedMetrics": ["nav"],
+    "expectedKeywords": ["nav"],
     "difficulty": "easy",
     "category": "fund_lookup"
   },
@@ -36,6 +40,7 @@
     "expectedFundCodes": [120323],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedKeywords": ["objective", "strategy"],
     "difficulty": "easy",
     "category": "fund_lookup"
   },
@@ -44,6 +49,7 @@
     "expectedFundCodes": [118632],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": ["returns"],
+    "expectedKeywords": ["return"],
     "difficulty": "medium",
     "category": "fund_lookup"
   },
@@ -52,6 +58,7 @@
     "expectedFundCodes": [118955],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": ["returns"],
+    "expectedKeywords": ["return"],
     "difficulty": "medium",
     "category": "fund_lookup"
   },
@@ -60,6 +67,7 @@
     "expectedFundCodes": [118668],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedKeywords": ["objective", "strategy"],
     "difficulty": "medium",
     "category": "fund_lookup"
   },
@@ -76,6 +84,7 @@
     "expectedFundCodes": [],
     "expectedIntent": "HOLDINGS",
     "expectedMetrics": ["holdings"],
+    "expectedKeywords": ["holding"],
     "difficulty": "hard",
     "category": "follow_up"
   },
@@ -92,6 +101,7 @@
     "expectedFundCodes": [118955, 118632],
     "expectedIntent": "COMPARE_FUNDS",
     "expectedMetrics": ["returns"],
+    "expectedKeywords": ["return"],
     "difficulty": "medium",
     "category": "comparison"
   },
@@ -108,6 +118,7 @@
     "expectedFundCodes": [118955],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedKeywords": ["strategy", "objective"],
     "difficulty": "medium",
     "category": "fund_lookup"
   },
@@ -116,6 +127,7 @@
     "expectedFundCodes": [],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedKeywords": ["expense ratio"],
     "difficulty": "hard",
     "category": "follow_up"
   },
@@ -156,6 +168,7 @@
     "expectedFundCodes": [118632],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedKeywords": ["risk"],
     "difficulty": "medium",
     "category": "fund_lookup"
   },
@@ -165,6 +178,7 @@
     "expectedFundCodes": [118955],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": ["returns"],
+    "expectedKeywords": ["return"],
     "difficulty": "hard",
     "category": "ner_abbreviation"
   },
@@ -173,6 +187,7 @@
     "expectedFundCodes": [118955, 118632],
     "expectedIntent": "COMPARE_FUNDS",
     "expectedMetrics": ["returns"],
+    "expectedKeywords": ["return"],
     "difficulty": "hard",
     "category": "ner_abbreviation"
   },
@@ -181,6 +196,7 @@
     "expectedFundCodes": [118955],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": ["returns"],
+    "expectedKeywords": ["return"],
     "difficulty": "medium",
     "category": "ner_messy"
   },
@@ -189,6 +205,7 @@
     "expectedFundCodes": [118955],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": ["returns"],
+    "expectedKeywords": ["return", "5Y"],
     "difficulty": "medium",
     "category": "ner_messy"
   },
@@ -197,6 +214,7 @@
     "expectedFundCodes": [118632],
     "expectedIntent": "NAV",
     "expectedMetrics": ["nav"],
+    "expectedKeywords": ["nav"],
     "difficulty": "medium",
     "category": "ner_messy"
   },
@@ -205,6 +223,7 @@
     "expectedFundCodes": [118955],
     "expectedIntent": "HOLDINGS",
     "expectedMetrics": ["holdings"],
+    "expectedKeywords": ["holding"],
     "difficulty": "medium",
     "category": "ner_messy"
   },
@@ -213,6 +232,7 @@
     "expectedFundCodes": [120323],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": ["returns"],
+    "expectedKeywords": ["return"],
     "difficulty": "medium",
     "category": "ner_messy"
   },
@@ -221,6 +241,7 @@
     "expectedFundCodes": [118955],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": ["returns"],
+    "expectedKeywords": ["return", "1Y"],
     "difficulty": "medium",
     "category": "ner_messy"
   },
@@ -229,6 +250,7 @@
     "expectedFundCodes": [118632],
     "expectedIntent": "HOLDINGS",
     "expectedMetrics": ["holdings"],
+    "expectedKeywords": ["holding"],
     "difficulty": "medium",
     "category": "ner_messy"
   },
@@ -237,6 +259,7 @@
     "expectedFundCodes": [118955, 118632],
     "expectedIntent": "COMPARE_FUNDS",
     "expectedMetrics": ["returns"],
+    "expectedKeywords": ["return", "3Y"],
     "difficulty": "hard",
     "category": "comparison"
   },
@@ -245,6 +268,7 @@
     "expectedFundCodes": [118955],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedKeywords": ["expense ratio"],
     "difficulty": "medium",
     "category": "ner_messy"
   },
@@ -253,6 +277,7 @@
     "expectedFundCodes": [118668],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": ["returns"],
+    "expectedKeywords": ["return"],
     "difficulty": "medium",
     "category": "ner_messy"
   },
@@ -269,6 +294,7 @@
     "expectedFundCodes": [118955],
     "expectedIntent": "COMPARE_FUNDS",
     "expectedMetrics": ["returns"],
+    "expectedKeywords": ["benchmark"],
     "difficulty": "hard",
     "category": "comparison"
   },
@@ -277,6 +303,7 @@
     "expectedFundCodes": [118632, 118955],
     "expectedIntent": "COMPARE_FUNDS",
     "expectedMetrics": ["returns"],
+    "expectedKeywords": ["return"],
     "difficulty": "medium",
     "category": "comparison"
   },
@@ -293,6 +320,7 @@
     "expectedFundCodes": [118955],
     "expectedIntent": "GENERAL",
     "expectedMetrics": [],
+    "expectedKeywords": ["objective", "strategy"],
     "difficulty": "hard",
     "category": "edge_case"
   },
@@ -301,6 +329,7 @@
     "expectedFundCodes": [118955],
     "expectedIntent": "COMPARE_FUNDS",
     "expectedMetrics": ["returns"],
+    "expectedKeywords": ["return"],
     "difficulty": "hard",
     "category": "comparison"
   },
@@ -309,6 +338,7 @@
     "expectedFundCodes": [118632],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedKeywords": ["aum"],
     "difficulty": "medium",
     "category": "ner_messy"
   },
@@ -317,6 +347,7 @@
     "expectedFundCodes": [118955],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedKeywords": ["risk"],
     "difficulty": "medium",
     "category": "ner_messy"
   },
@@ -325,6 +356,7 @@
     "expectedFundCodes": [120323, 118632],
     "expectedIntent": "COMPARE_FUNDS",
     "expectedMetrics": ["returns"],
+    "expectedKeywords": ["return"],
     "difficulty": "hard",
     "category": "comparison"
   },
@@ -333,6 +365,7 @@
     "expectedFundCodes": [118955],
     "expectedIntent": "HOLDINGS",
     "expectedMetrics": ["holdings"],
+    "expectedKeywords": ["holding"],
     "difficulty": "medium",
     "category": "ner_messy"
   },
@@ -341,6 +374,7 @@
     "expectedFundCodes": [118955],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedKeywords": ["exit load"],
     "difficulty": "medium",
     "category": "ner_messy"
   },
@@ -349,6 +383,7 @@
     "expectedFundCodes": [118668],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": ["returns"],
+    "expectedKeywords": ["return", "5Y"],
     "difficulty": "hard",
     "category": "ner_messy"
   },
@@ -357,6 +392,7 @@
     "expectedFundCodes": [118955, 118632, 120323],
     "expectedIntent": "COMPARE_FUNDS",
     "expectedMetrics": ["returns"],
+    "expectedKeywords": ["return"],
     "difficulty": "hard",
     "category": "comparison"
   },
@@ -365,6 +401,7 @@
     "expectedFundCodes": [118955],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": ["returns"],
+    "expectedKeywords": ["return"],
     "difficulty": "easy",
     "category": "fund_lookup"
   },
@@ -373,6 +410,7 @@
     "expectedFundCodes": [118955],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": ["returns"],
+    "expectedKeywords": ["return", "3Y"],
     "difficulty": "medium",
     "category": "ner_messy"
   },
@@ -389,6 +427,7 @@
     "expectedFundCodes": [118955],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedKeywords": ["exit load"],
     "difficulty": "medium",
     "category": "lexical_exact"
   },
@@ -397,6 +436,7 @@
     "expectedFundCodes": [118632],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedKeywords": ["expense ratio"],
     "difficulty": "medium",
     "category": "lexical_exact"
   },
@@ -405,6 +445,7 @@
     "expectedFundCodes": [118955],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedKeywords": ["fund manager"],
     "difficulty": "medium",
     "category": "lexical_exact"
   },
@@ -413,6 +454,7 @@
     "expectedFundCodes": [118668],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedKeywords": ["benchmark"],
     "difficulty": "medium",
     "category": "lexical_exact"
   },
@@ -421,6 +463,7 @@
     "expectedFundCodes": [120323],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedKeywords": ["sip", "minimum"],
     "difficulty": "medium",
     "category": "lexical_exact"
   },
@@ -429,6 +472,7 @@
     "expectedFundCodes": [118955],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedKeywords": ["fund manager"],
     "difficulty": "easy",
     "category": "lexical_exact"
   },
@@ -437,6 +481,7 @@
     "expectedFundCodes": [118955],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedKeywords": ["exit load", "expense ratio"],
     "difficulty": "hard",
     "category": "lexical_exact"
   },
@@ -445,6 +490,7 @@
     "expectedFundCodes": [118632],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedKeywords": ["fund manager", "benchmark"],
     "difficulty": "hard",
     "category": "lexical_exact"
   }
