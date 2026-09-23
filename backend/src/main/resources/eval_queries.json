@@ -6,6 +6,9 @@
     ],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedFacts": [
+      "0.86"
+    ],
     "difficulty": "easy",
     "category": "structured_fact"
   },
@@ -16,6 +19,9 @@
     ],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedFacts": [
+      "Exit load of 0.25% if redeemed within 15 days."
+    ],
     "difficulty": "easy",
     "category": "structured_fact"
   },
@@ -26,6 +32,9 @@
     ],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedFacts": [
+      "Sailesh Jain, Pranav Gokhale, Payal Kaipunjal, Ramesh Mantri, Lovelish Solanki, Rajat Jain"
+    ],
     "difficulty": "medium",
     "category": "structured_fact"
   },
@@ -36,6 +45,9 @@
     ],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedFacts": [
+      "NIFTY 50 Arbitrage Total Return Index "
+    ],
     "difficulty": "medium",
     "category": "structured_fact"
   },
@@ -46,6 +58,9 @@
     ],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedFacts": [
+      "16294.0829"
+    ],
     "difficulty": "medium",
     "category": "structured_fact"
   },
@@ -56,6 +71,9 @@
     ],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedFacts": [
+      "0.99"
+    ],
     "difficulty": "easy",
     "category": "structured_fact"
   },
@@ -66,6 +84,9 @@
     ],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedFacts": [
+      "Exit load of 1%, if redeemed within 1 month."
+    ],
     "difficulty": "easy",
     "category": "structured_fact"
   },
@@ -76,6 +97,9 @@
     ],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedFacts": [
+      "Vinay Sharma"
+    ],
     "difficulty": "medium",
     "category": "structured_fact"
   },
@@ -86,6 +110,9 @@
     ],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedFacts": [
+      "NIFTY Financial Services Total Return Index"
+    ],
     "difficulty": "medium",
     "category": "structured_fact"
   },
@@ -96,6 +123,9 @@
     ],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedFacts": [
+      "7441.6607"
+    ],
     "difficulty": "medium",
     "category": "structured_fact"
   },
@@ -106,6 +136,9 @@
     ],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedFacts": [
+      "0.68"
+    ],
     "difficulty": "easy",
     "category": "structured_fact"
   },
@@ -116,6 +149,9 @@
     ],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedFacts": [
+      "Exit load of 1% if redeemed within 7 days."
+    ],
     "difficulty": "easy",
     "category": "structured_fact"
   },
@@ -126,6 +162,9 @@
     ],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedFacts": [
+      "S Naren, Rajat Chandak, Ramesh Mantri, Vinay Paharia, Taher Badshah, Harish Zaveri, Ashwani Kumar, Sailesh Raj Bhan"
+    ],
     "difficulty": "medium",
     "category": "structured_fact"
   },
@@ -136,6 +175,9 @@
     ],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedFacts": [
+      "BSE 100 Total Return Index"
+    ],
     "difficulty": "medium",
     "category": "structured_fact"
   },
@@ -146,6 +188,9 @@
     ],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedFacts": [
+      "51660.3042"
+    ],
     "difficulty": "medium",
     "category": "structured_fact"
   },
@@ -156,6 +201,9 @@
     ],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedFacts": [
+      "0.71"
+    ],
     "difficulty": "easy",
     "category": "structured_fact"
   },
@@ -166,6 +214,9 @@
     ],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedFacts": [
+      "For units more than 10% of the investments, an exit load of 1% if redeemed within 12 months."
+    ],
     "difficulty": "easy",
     "category": "structured_fact"
   },
@@ -176,6 +227,9 @@
     ],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedFacts": [
+      "Ratish Varier, Abhishek Bisen, Atul Patel, George Heber Joseph, Neelotpal Sahai, Sailesh Raj Bhan"
+    ],
     "difficulty": "medium",
     "category": "structured_fact"
   },
@@ -186,6 +240,9 @@
     ],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedFacts": [
+      "Nifty 500 Multicap 50:25:25 Total Return Index"
+    ],
     "difficulty": "medium",
     "category": "structured_fact"
   },
@@ -196,6 +253,9 @@
     ],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedFacts": [
+      "53410.9909"
+    ],
     "difficulty": "medium",
     "category": "structured_fact"
   },
@@ -206,6 +266,9 @@
     ],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedFacts": [
+      "0.36"
+    ],
     "difficulty": "easy",
     "category": "structured_fact"
   },
@@ -216,6 +279,9 @@
     ],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedFacts": [
+      "Nil"
+    ],
     "difficulty": "easy",
     "category": "structured_fact"
   },
@@ -226,6 +292,9 @@
     ],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedFacts": [
+      "Amit Tripathi, Vivek Sharma, Rahul Goswami, Nikhil Kabra, Mayank Bukrediwala, Deepak Agrawal, Kaustubh Gupta"
+    ],
     "difficulty": "medium",
     "category": "structured_fact"
   },
@@ -236,6 +305,9 @@
     ],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedFacts": [
+      "NIFTY Short Duration Debt Index A-II"
+    ],
     "difficulty": "medium",
     "category": "structured_fact"
   },
@@ -246,6 +318,9 @@
     ],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedFacts": [
+      "7522.0613"
+    ],
     "difficulty": "medium",
     "category": "structured_fact"
   },
@@ -256,6 +331,9 @@
     ],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedFacts": [
+      "0.05"
+    ],
     "difficulty": "easy",
     "category": "structured_fact"
   },
@@ -266,6 +344,9 @@
     ],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedFacts": [
+      "Exit load of 1%, if redeemed within 15 days"
+    ],
     "difficulty": "easy",
     "category": "structured_fact"
   },
@@ -276,6 +357,9 @@
     ],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedFacts": [
+      "Payal Kaipunjal"
+    ],
     "difficulty": "medium",
     "category": "structured_fact"
   },
@@ -286,6 +370,9 @@
     ],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedFacts": [
+      "Domestic Price of Gold Index"
+    ],
     "difficulty": "medium",
     "category": "structured_fact"
   },
@@ -296,6 +383,9 @@
     ],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedFacts": [
+      "7553.4328"
+    ],
     "difficulty": "medium",
     "category": "structured_fact"
   },
@@ -306,6 +396,9 @@
     ],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedFacts": [
+      "0.78"
+    ],
     "difficulty": "easy",
     "category": "structured_fact"
   },
@@ -316,6 +409,9 @@
     ],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedFacts": [
+      "Exit load of 1% if redeemed within 1 months"
+    ],
     "difficulty": "easy",
     "category": "structured_fact"
   },
@@ -326,6 +422,9 @@
     ],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedFacts": [
+      "Chirag Setalvad, Harshad Patwardhan, Manish Gunwani, S Krishnakumar, Trupti Agrawal"
+    ],
     "difficulty": "medium",
     "category": "structured_fact"
   },
@@ -336,6 +435,9 @@
     ],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedFacts": [
+      "NIFTY Midcap 150 Total Return Index"
+    ],
     "difficulty": "medium",
     "category": "structured_fact"
   },
@@ -346,6 +448,9 @@
     ],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedFacts": [
+      "47415.41381524"
+    ],
     "difficulty": "medium",
     "category": "structured_fact"
   },
@@ -356,6 +461,9 @@
     ],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedFacts": [
+      "0.49"
+    ],
     "difficulty": "easy",
     "category": "structured_fact"
   },
@@ -366,6 +474,9 @@
     ],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedFacts": [
+      "Nil"
+    ],
     "difficulty": "easy",
     "category": "structured_fact"
   },
@@ -376,6 +487,9 @@
     ],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedFacts": [
+      "Anil Bamboli, Rahul Goswami, Anuj Tagra, Prashant R.Pimple, Sachin Padwal-Desai, Umesh Sharma, Hetal Shah, Suyash Choudhary"
+    ],
     "difficulty": "medium",
     "category": "structured_fact"
   },
@@ -386,6 +500,9 @@
     ],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedFacts": [
+      "NIFTY All Duration G-Sec Index"
+    ],
     "difficulty": "medium",
     "category": "structured_fact"
   },
@@ -396,6 +513,9 @@
     ],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
+    "expectedFacts": [
+      "1637.2175"
+    ],
     "difficulty": "medium",
     "category": "structured_fact"
   },

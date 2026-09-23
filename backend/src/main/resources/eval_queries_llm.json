@@ -1,0 +1,327 @@
+[
+  {
+    "query": "What is the expense ratio of Nippon India Arbitrage Fund?",
+    "expectedFundCodes": [
+      118585
+    ],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": [],
+    "expectedFacts": [
+      "0.86"
+    ],
+    "difficulty": "easy",
+    "category": "structured_fact"
+  },
+  {
+    "query": "What is the exit load of Nippon India Arbitrage Fund?",
+    "expectedFundCodes": [
+      118585
+    ],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": [],
+    "expectedFacts": [
+      "Exit load of 0.25% if redeemed within 15 days."
+    ],
+    "difficulty": "easy",
+    "category": "structured_fact"
+  },
+  {
+    "query": "Who manages Nippon India Arbitrage Fund?",
+    "expectedFundCodes": [
+      118585
+    ],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": [],
+    "expectedFacts": [
+      "Sailesh Jain, Pranav Gokhale, Payal Kaipunjal, Ramesh Mantri, Lovelish Solanki, Rajat Jain"
+    ],
+    "difficulty": "medium",
+    "category": "structured_fact"
+  },
+  {
+    "query": "What is the benchmark of Nippon India Arbitrage Fund?",
+    "expectedFundCodes": [
+      118585
+    ],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": [],
+    "expectedFacts": [
+      "NIFTY 50 Arbitrage Total Return Index "
+    ],
+    "difficulty": "medium",
+    "category": "structured_fact"
+  },
+  {
+    "query": "What is the AUM of Nippon India Arbitrage Fund?",
+    "expectedFundCodes": [
+      118585
+    ],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": [],
+    "expectedFacts": [
+      "16294.0829"
+    ],
+    "difficulty": "medium",
+    "category": "structured_fact"
+  },
+  {
+    "query": "What is the expense ratio of Nippon India Banking & Financial Services Fund?",
+    "expectedFundCodes": [
+      118589
+    ],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": [],
+    "expectedFacts": [
+      "0.99"
+    ],
+    "difficulty": "easy",
+    "category": "structured_fact"
+  },
+  {
+    "query": "What is the exit load of Nippon India Banking & Financial Services Fund?",
+    "expectedFundCodes": [
+      118589
+    ],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": [],
+    "expectedFacts": [
+      "Exit load of 1%, if redeemed within 1 month."
+    ],
+    "difficulty": "easy",
+    "category": "structured_fact"
+  },
+  {
+    "query": "Who manages Nippon India Banking & Financial Services Fund?",
+    "expectedFundCodes": [
+      118589
+    ],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": [],
+    "expectedFacts": [
+      "Vinay Sharma"
+    ],
+    "difficulty": "medium",
+    "category": "structured_fact"
+  },
+  {
+    "query": "What is the benchmark of Nippon India Banking & Financial Services Fund?",
+    "expectedFundCodes": [
+      118589
+    ],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": [],
+    "expectedFacts": [
+      "NIFTY Financial Services Total Return Index"
+    ],
+    "difficulty": "medium",
+    "category": "structured_fact"
+  },
+  {
+    "query": "What is the AUM of Nippon India Banking & Financial Services Fund?",
+    "expectedFundCodes": [
+      118589
+    ],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": [],
+    "expectedFacts": [
+      "7441.6607"
+    ],
+    "difficulty": "medium",
+    "category": "structured_fact"
+  },
+  {
+    "query": "What is the expense ratio of Nippon India Large Cap Fund?",
+    "expectedFundCodes": [
+      118632
+    ],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": [],
+    "expectedFacts": [
+      "0.68"
+    ],
+    "difficulty": "easy",
+    "category": "structured_fact"
+  },
+  {
+    "query": "What is the exit load of Nippon India Large Cap Fund?",
+    "expectedFundCodes": [
+      118632
+    ],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": [],
+    "expectedFacts": [
+      "Exit load of 1% if redeemed within 7 days."
+    ],
+    "difficulty": "easy",
+    "category": "structured_fact"
+  },
+  {
+    "query": "Who manages Nippon India Large Cap Fund?",
+    "expectedFundCodes": [
+      118632
+    ],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": [],
+    "expectedFacts": [
+      "S Naren, Rajat Chandak, Ramesh Mantri, Vinay Paharia, Taher Badshah, Harish Zaveri, Ashwani Kumar, Sailesh Raj Bhan"
+    ],
+    "difficulty": "medium",
+    "category": "structured_fact"
+  },
+  {
+    "query": "What is the benchmark of Nippon India Large Cap Fund?",
+    "expectedFundCodes": [
+      118632
+    ],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": [],
+    "expectedFacts": [
+      "BSE 100 Total Return Index"
+    ],
+    "difficulty": "medium",
+    "category": "structured_fact"
+  },
+  {
+    "query": "What is the AUM of Nippon India Large Cap Fund?",
+    "expectedFundCodes": [
+      118632
+    ],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": [],
+    "expectedFacts": [
+      "51660.3042"
+    ],
+    "difficulty": "medium",
+    "category": "structured_fact"
+  },
+  {
+    "query": "What is the expense ratio of Nippon India Multi Cap Fund?",
+    "expectedFundCodes": [
+      118650
+    ],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": [],
+    "expectedFacts": [
+      "0.71"
+    ],
+    "difficulty": "easy",
+    "category": "structured_fact"
+  },
+  {
+    "query": "What is the exit load of Nippon India Multi Cap Fund?",
+    "expectedFundCodes": [
+      118650
+    ],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": [],
+    "expectedFacts": [
+      "For units more than 10% of the investments, an exit load of 1% if redeemed within 12 months."
+    ],
+    "difficulty": "easy",
+    "category": "structured_fact"
+  },
+  {
+    "query": "Who manages Nippon India Multi Cap Fund?",
+    "expectedFundCodes": [
+      118650
+    ],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": [],
+    "expectedFacts": [
+      "Ratish Varier, Abhishek Bisen, Atul Patel, George Heber Joseph, Neelotpal Sahai, Sailesh Raj Bhan"
+    ],
+    "difficulty": "medium",
+    "category": "structured_fact"
+  },
+  {
+    "query": "What is the benchmark of Nippon India Multi Cap Fund?",
+    "expectedFundCodes": [
+      118650
+    ],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": [],
+    "expectedFacts": [
+      "Nifty 500 Multicap 50:25:25 Total Return Index"
+    ],
+    "difficulty": "medium",
+    "category": "structured_fact"
+  },
+  {
+    "query": "What is the AUM of Nippon India Multi Cap Fund?",
+    "expectedFundCodes": [
+      118650
+    ],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": [],
+    "expectedFacts": [
+      "53410.9909"
+    ],
+    "difficulty": "medium",
+    "category": "structured_fact"
+  },
+  {
+    "query": "What is the expense ratio of Nippon India Floater Fund?",
+    "expectedFundCodes": [
+      118656
+    ],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": [],
+    "expectedFacts": [
+      "0.36"
+    ],
+    "difficulty": "easy",
+    "category": "structured_fact"
+  },
+  {
+    "query": "What is the exit load of Nippon India Floater Fund?",
+    "expectedFundCodes": [
+      118656
+    ],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": [],
+    "expectedFacts": [
+      "Nil"
+    ],
+    "difficulty": "easy",
+    "category": "structured_fact"
+  },
+  {
+    "query": "Who manages Nippon India Floater Fund?",
+    "expectedFundCodes": [
+      118656
+    ],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": [],
+    "expectedFacts": [
+      "Amit Tripathi, Vivek Sharma, Rahul Goswami, Nikhil Kabra, Mayank Bukrediwala, Deepak Agrawal, Kaustubh Gupta"
+    ],
+    "difficulty": "medium",
+    "category": "structured_fact"
+  },
+  {
+    "query": "What is the benchmark of Nippon India Floater Fund?",
+    "expectedFundCodes": [
+      118656
+    ],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": [],
+    "expectedFacts": [
+      "NIFTY Short Duration Debt Index A-II"
+    ],
+    "difficulty": "medium",
+    "category": "structured_fact"
+  },
+  {
+    "query": "What is the AUM of Nippon India Floater Fund?",
+    "expectedFundCodes": [
+      118656
+    ],
+    "expectedIntent": "FUND_DETAILS",
+    "expectedMetrics": [],
+    "expectedFacts": [
+      "7522.0613"
+    ],
+    "difficulty": "medium",
+    "category": "structured_fact"
+  }
+]

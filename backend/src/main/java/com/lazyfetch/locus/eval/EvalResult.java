@@ -11,12 +11,13 @@ public class EvalResult {
     private int tokensUsed;        // How many tokens were used
     private String difficulty;
     private String category;
+    private boolean contextSufficient;
 
  
     public EvalResult(String query, double precision, double recall, 
                        boolean intentMatch, boolean metricsMatch, 
                        boolean chunkRelevant, long latencyMs, int tokensUsed,
-                       String difficulty, String category) {
+                       String difficulty, String category, boolean contextSufficient) {
         this.query = query;
         this.precision = precision;
         this.recall = recall;
@@ -27,6 +28,7 @@ public class EvalResult {
         this.tokensUsed = tokensUsed;
         this.difficulty = difficulty;
         this.category = category;
+        this.contextSufficient = contextSufficient;
     }
 
     public String getQuery() { return query; }
@@ -39,4 +41,5 @@ public class EvalResult {
     public int getTokensUsed() { return tokensUsed; }
     public String getDifficulty() { return difficulty; }
     public String getCategory() { return category; }
+    public boolean isContextSufficient() { return contextSufficient; }
 }

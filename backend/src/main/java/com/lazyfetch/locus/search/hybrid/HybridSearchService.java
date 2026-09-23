@@ -246,4 +246,4 @@ public class HybridSearchService {
             })
             .collect(Collectors.toList());
     }
-}       
+}

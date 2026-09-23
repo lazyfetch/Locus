@@ -10,6 +10,7 @@ public class EvalQuery {
     private List<String> expectedKeywords;   // NEW
     private String difficulty;  // "easy", "medium", "hard"
     private String category;    // "fund_lookup", "comparison", "follow_up", "edge_case"
+    private List<String> expectedFacts;
 
     public String getDifficulty() { return difficulty; }
     public void setDifficulty(String difficulty) { this.difficulty = difficulty; }
@@ -26,4 +27,6 @@ public class EvalQuery {
     public void setExpectedMetrics(List<String> metrics) { this.expectedMetrics = metrics; }
     public List<String> getExpectedKeywords() { return expectedKeywords; }          // NEW
     public void setExpectedKeywords(List<String> keywords) { this.expectedKeywords = keywords; }  // NEW
+    public List<String> getExpectedFacts() { return expectedFacts; }
+    public void setExpectedFacts(List<String> f) { this.expectedFacts = f; }
 }

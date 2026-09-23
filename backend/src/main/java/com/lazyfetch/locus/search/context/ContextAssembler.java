@@ -6,8 +6,7 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ContextAssembler 
-{
+public class ContextAssembler {
 
     private static final String SYSTEM_PROMPT = """
         You are Locus AI, a financial intelligence assistant specializing in Indian mutual funds and markets.
@@ -30,7 +29,8 @@ public class ContextAssembler
         - Do NOT fabricate specific numbers. If you don't know a number, say so.
     """;
 
-    public String assemble(List<Map<String, Object>> structured, List<Map<String, Object>> chunks, String history, String userQuery) 
+    public String assemble(List<Map<String, Object>> structured, List<Map<String, Object>> chunks,
+                           String history, String userQuery) 
     {
         StringBuilder prompt = new StringBuilder();
 
@@ -89,6 +89,17 @@ public class ContextAssembler
                             prompt.append(" — ").append(item.get("scheme_category"));
                         }
                         prompt.append("\n");
+
+                        if (item.get("expense_ratio_direct") != null)
+                            prompt.append("  - Expense Ratio: ").append(item.get("expense_ratio_direct")).append("%\n");
+                        if (item.get("exit_load") != null)
+                            prompt.append("  - Exit Load: ").append(item.get("exit_load")).append("\n");
+                        if (item.get("fund_managers") != null)
+                            prompt.append("  - Fund Managers: ").append(item.get("fund_managers")).append("\n");
+                        if (item.get("benchmark_index") != null)
+                            prompt.append("  - Benchmark: ").append(item.get("benchmark_index")).append("\n");
+                        if (item.get("aum_cr") != null)
+                            prompt.append("  - AUM (Cr): ").append(item.get("aum_cr")).append("\n");
                     }
                 }
                 prompt.append("\n");

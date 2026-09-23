@@ -252,6 +252,7 @@ public class SearchController {
         entry.put("avgLatencyMs", report.getAvgLatencyMs());
         entry.put("totalTokensUsed", report.getTotalTokensUsed());
         entry.put("chunkRelevance", report.getChunkRelevanceRate());
+        entry.put("contextSufficiency", report.getContextSufficiencyRate());
         
         // Read existing history
         Path historyPath = Paths.get("src", "main", "resources", "eval_history.json");
