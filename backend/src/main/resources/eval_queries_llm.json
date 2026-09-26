@@ -1,5 +1,101 @@
 [
   {
+    "query": "Compare Quantum Value Fund and Quantum Liquid Fund returns",
+    "expectedFundCodes": [
+      103490,
+      103734
+    ],
+    "expectedIntent": "COMPARE_FUNDS",
+    "expectedMetrics": [
+      "returns"
+    ],
+    "expectedKeywords": [
+      "return"
+    ],
+    "difficulty": "hard",
+    "category": "comparison"
+  },
+  {
+    "query": "Which is better, Quantum Value Fund or Quantum Liquid Fund?",
+    "expectedFundCodes": [
+      103490,
+      103734
+    ],
+    "expectedIntent": "COMPARE_FUNDS",
+    "expectedMetrics": [
+      "returns"
+    ],
+    "expectedKeywords": [
+      "return"
+    ],
+    "difficulty": "medium",
+    "category": "comparison"
+  },
+  {
+    "query": "Compare Quantum ELSS Tax Saver Fund and Quantum Diversified Equity All Cap Active FOF returns",
+    "expectedFundCodes": [
+      111549,
+      112039
+    ],
+    "expectedIntent": "COMPARE_FUNDS",
+    "expectedMetrics": [
+      "returns"
+    ],
+    "expectedKeywords": [
+      "return"
+    ],
+    "difficulty": "hard",
+    "category": "comparison"
+  },
+  {
+    "query": "Which is better, Quantum ELSS Tax Saver Fund or Quantum Diversified Equity All Cap Active FOF?",
+    "expectedFundCodes": [
+      111549,
+      112039
+    ],
+    "expectedIntent": "COMPARE_FUNDS",
+    "expectedMetrics": [
+      "returns"
+    ],
+    "expectedKeywords": [
+      "return"
+    ],
+    "difficulty": "medium",
+    "category": "comparison"
+  },
+  {
+    "query": "Compare Quantum Gold Savings Fund and Quantum Multi Asset Active FOF returns",
+    "expectedFundCodes": [
+      115132,
+      117608
+    ],
+    "expectedIntent": "COMPARE_FUNDS",
+    "expectedMetrics": [
+      "returns"
+    ],
+    "expectedKeywords": [
+      "return"
+    ],
+    "difficulty": "hard",
+    "category": "comparison"
+  },
+  {
+    "query": "Which is better, Quantum Gold Savings Fund or Quantum Multi Asset Active FOF?",
+    "expectedFundCodes": [
+      115132,
+      117608
+    ],
+    "expectedIntent": "COMPARE_FUNDS",
+    "expectedMetrics": [
+      "returns"
+    ],
+    "expectedKeywords": [
+      "return"
+    ],
+    "difficulty": "medium",
+    "category": "comparison"
+  },
+  {
     "query": "What is the expense ratio of Nippon India Arbitrage Fund?",
     "expectedFundCodes": [
       118585
@@ -78,250 +174,81 @@
     "category": "structured_fact"
   },
   {
-    "query": "What is the exit load of Nippon India Banking & Financial Services Fund?",
+    "query": "Summarize the objective of HDFC Value Fund",
     "expectedFundCodes": [
-      118589
+      118935
     ],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
-    "expectedFacts": [
-      "Exit load of 1%, if redeemed within 1 month."
-    ],
-    "difficulty": "easy",
-    "category": "structured_fact"
-  },
-  {
-    "query": "Who manages Nippon India Banking & Financial Services Fund?",
-    "expectedFundCodes": [
-      118589
-    ],
-    "expectedIntent": "FUND_DETAILS",
-    "expectedMetrics": [],
-    "expectedFacts": [
-      "Vinay Sharma"
+    "expectedKeywords": [
+      "objective"
     ],
     "difficulty": "medium",
-    "category": "structured_fact"
+    "category": "chunk_retrieval"
   },
   {
-    "query": "What is the benchmark of Nippon India Banking & Financial Services Fund?",
+    "query": "Summarize the objective of HDFC Low Duration  Fund",
     "expectedFundCodes": [
-      118589
+      118942
     ],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
-    "expectedFacts": [
-      "NIFTY Financial Services Total Return Index"
+    "expectedKeywords": [
+      "objective"
     ],
     "difficulty": "medium",
-    "category": "structured_fact"
+    "category": "chunk_retrieval"
   },
   {
-    "query": "What is the AUM of Nippon India Banking & Financial Services Fund?",
+    "query": "Summarize the objective of HDFC Focused Fund",
     "expectedFundCodes": [
-      118589
+      118950
     ],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
-    "expectedFacts": [
-      "7441.6607"
+    "expectedKeywords": [
+      "objective"
     ],
     "difficulty": "medium",
-    "category": "structured_fact"
+    "category": "chunk_retrieval"
   },
   {
-    "query": "What is the expense ratio of Nippon India Large Cap Fund?",
+    "query": "Summarize the objective of HDFC Flexi Cap Fund",
     "expectedFundCodes": [
-      118632
+      118955
     ],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
-    "expectedFacts": [
-      "0.68"
-    ],
-    "difficulty": "easy",
-    "category": "structured_fact"
-  },
-  {
-    "query": "What is the exit load of Nippon India Large Cap Fund?",
-    "expectedFundCodes": [
-      118632
-    ],
-    "expectedIntent": "FUND_DETAILS",
-    "expectedMetrics": [],
-    "expectedFacts": [
-      "Exit load of 1% if redeemed within 7 days."
-    ],
-    "difficulty": "easy",
-    "category": "structured_fact"
-  },
-  {
-    "query": "Who manages Nippon India Large Cap Fund?",
-    "expectedFundCodes": [
-      118632
-    ],
-    "expectedIntent": "FUND_DETAILS",
-    "expectedMetrics": [],
-    "expectedFacts": [
-      "S Naren, Rajat Chandak, Ramesh Mantri, Vinay Paharia, Taher Badshah, Harish Zaveri, Ashwani Kumar, Sailesh Raj Bhan"
+    "expectedKeywords": [
+      "objective"
     ],
     "difficulty": "medium",
-    "category": "structured_fact"
+    "category": "chunk_retrieval"
   },
   {
-    "query": "What is the benchmark of Nippon India Large Cap Fund?",
+    "query": "Summarize the objective of HDFC Floating Rate Debt Fund",
     "expectedFundCodes": [
-      118632
+      118961
     ],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
-    "expectedFacts": [
-      "BSE 100 Total Return Index"
+    "expectedKeywords": [
+      "objective"
     ],
     "difficulty": "medium",
-    "category": "structured_fact"
+    "category": "chunk_retrieval"
   },
   {
-    "query": "What is the AUM of Nippon India Large Cap Fund?",
+    "query": "Summarize the objective of HDFC Balanced Advantage Fund",
     "expectedFundCodes": [
-      118632
+      118968
     ],
     "expectedIntent": "FUND_DETAILS",
     "expectedMetrics": [],
-    "expectedFacts": [
-      "51660.3042"
+    "expectedKeywords": [
+      "objective"
     ],
     "difficulty": "medium",
-    "category": "structured_fact"
-  },
-  {
-    "query": "What is the expense ratio of Nippon India Multi Cap Fund?",
-    "expectedFundCodes": [
-      118650
-    ],
-    "expectedIntent": "FUND_DETAILS",
-    "expectedMetrics": [],
-    "expectedFacts": [
-      "0.71"
-    ],
-    "difficulty": "easy",
-    "category": "structured_fact"
-  },
-  {
-    "query": "What is the exit load of Nippon India Multi Cap Fund?",
-    "expectedFundCodes": [
-      118650
-    ],
-    "expectedIntent": "FUND_DETAILS",
-    "expectedMetrics": [],
-    "expectedFacts": [
-      "For units more than 10% of the investments, an exit load of 1% if redeemed within 12 months."
-    ],
-    "difficulty": "easy",
-    "category": "structured_fact"
-  },
-  {
-    "query": "Who manages Nippon India Multi Cap Fund?",
-    "expectedFundCodes": [
-      118650
-    ],
-    "expectedIntent": "FUND_DETAILS",
-    "expectedMetrics": [],
-    "expectedFacts": [
-      "Ratish Varier, Abhishek Bisen, Atul Patel, George Heber Joseph, Neelotpal Sahai, Sailesh Raj Bhan"
-    ],
-    "difficulty": "medium",
-    "category": "structured_fact"
-  },
-  {
-    "query": "What is the benchmark of Nippon India Multi Cap Fund?",
-    "expectedFundCodes": [
-      118650
-    ],
-    "expectedIntent": "FUND_DETAILS",
-    "expectedMetrics": [],
-    "expectedFacts": [
-      "Nifty 500 Multicap 50:25:25 Total Return Index"
-    ],
-    "difficulty": "medium",
-    "category": "structured_fact"
-  },
-  {
-    "query": "What is the AUM of Nippon India Multi Cap Fund?",
-    "expectedFundCodes": [
-      118650
-    ],
-    "expectedIntent": "FUND_DETAILS",
-    "expectedMetrics": [],
-    "expectedFacts": [
-      "53410.9909"
-    ],
-    "difficulty": "medium",
-    "category": "structured_fact"
-  },
-  {
-    "query": "What is the expense ratio of Nippon India Floater Fund?",
-    "expectedFundCodes": [
-      118656
-    ],
-    "expectedIntent": "FUND_DETAILS",
-    "expectedMetrics": [],
-    "expectedFacts": [
-      "0.36"
-    ],
-    "difficulty": "easy",
-    "category": "structured_fact"
-  },
-  {
-    "query": "What is the exit load of Nippon India Floater Fund?",
-    "expectedFundCodes": [
-      118656
-    ],
-    "expectedIntent": "FUND_DETAILS",
-    "expectedMetrics": [],
-    "expectedFacts": [
-      "Nil"
-    ],
-    "difficulty": "easy",
-    "category": "structured_fact"
-  },
-  {
-    "query": "Who manages Nippon India Floater Fund?",
-    "expectedFundCodes": [
-      118656
-    ],
-    "expectedIntent": "FUND_DETAILS",
-    "expectedMetrics": [],
-    "expectedFacts": [
-      "Amit Tripathi, Vivek Sharma, Rahul Goswami, Nikhil Kabra, Mayank Bukrediwala, Deepak Agrawal, Kaustubh Gupta"
-    ],
-    "difficulty": "medium",
-    "category": "structured_fact"
-  },
-  {
-    "query": "What is the benchmark of Nippon India Floater Fund?",
-    "expectedFundCodes": [
-      118656
-    ],
-    "expectedIntent": "FUND_DETAILS",
-    "expectedMetrics": [],
-    "expectedFacts": [
-      "NIFTY Short Duration Debt Index A-II"
-    ],
-    "difficulty": "medium",
-    "category": "structured_fact"
-  },
-  {
-    "query": "What is the AUM of Nippon India Floater Fund?",
-    "expectedFundCodes": [
-      118656
-    ],
-    "expectedIntent": "FUND_DETAILS",
-    "expectedMetrics": [],
-    "expectedFacts": [
-      "7522.0613"
-    ],
-    "difficulty": "medium",
-    "category": "structured_fact"
+    "category": "chunk_retrieval"
   }
 ]

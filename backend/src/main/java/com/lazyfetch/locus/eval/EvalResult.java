@@ -12,12 +12,15 @@ public class EvalResult {
     private String difficulty;
     private String category;
     private boolean contextSufficient;
+    private boolean answerGrounded;   
+    private double sourceEfficiency; 
 
  
     public EvalResult(String query, double precision, double recall, 
                        boolean intentMatch, boolean metricsMatch, 
                        boolean chunkRelevant, long latencyMs, int tokensUsed,
-                       String difficulty, String category, boolean contextSufficient) {
+                       String difficulty, String category, boolean contextSufficient, 
+                       boolean answerGrounded, double sourceEfficiency) {
         this.query = query;
         this.precision = precision;
         this.recall = recall;
@@ -29,6 +32,8 @@ public class EvalResult {
         this.difficulty = difficulty;
         this.category = category;
         this.contextSufficient = contextSufficient;
+        this.answerGrounded = answerGrounded;
+        this.sourceEfficiency = sourceEfficiency;
     }
 
     public String getQuery() { return query; }
@@ -42,4 +47,6 @@ public class EvalResult {
     public String getDifficulty() { return difficulty; }
     public String getCategory() { return category; }
     public boolean isContextSufficient() { return contextSufficient; }
+    public boolean isAnswerGrounded() { return answerGrounded; }
+    public double getSourceEfficiency() { return sourceEfficiency; }
 }

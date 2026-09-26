@@ -7,6 +7,8 @@ import com.lazyfetch.locus.search.dto.HybridSearchResponse;
 import com.lazyfetch.locus.search.hybrid.HybridSearchService;
 import com.lazyfetch.locus.search.planner.RetrievalPlan;
 import org.springframework.stereotype.Service;
+import com.lazyfetch.locus.search.rag.RagService;
+import com.lazyfetch.locus.search.tokens.TokenCounter;
 
 import java.io.InputStream;
 import java.util.*;
@@ -20,16 +22,22 @@ public class EvaluationService {
     private final ContextBudgetAllocator budgetAllocator;
     private final ContextCompressor contextCompressor;
     private final ContextAssembler contextAssembler;
+    private final RagService ragService;
+    private final TokenCounter tokenCounter;
 
     
     public EvaluationService(HybridSearchService hybridSearchService,
                              ContextBudgetAllocator budgetAllocator,
                              ContextCompressor contextCompressor,
-                             ContextAssembler contextAssembler) {
+                             ContextAssembler contextAssembler,
+                             RagService ragService,
+                             TokenCounter tokenCounter) {
         this.hybridSearchService = hybridSearchService;
         this.budgetAllocator = budgetAllocator;
         this.contextCompressor = contextCompressor;
         this.contextAssembler = contextAssembler;
+        this.ragService = ragService;
+        this.tokenCounter = tokenCounter;
     }
 
     public List<EvalQuery> loadQueries() throws Exception {
@@ -112,8 +120,9 @@ public class EvaluationService {
             }
 
             results.add(new EvalResult(q.getQuery(), precision, recall, intentMatch, metricsMatch,
-                           chunkRelevant, latency, tokens,
-                           q.getDifficulty(), q.getCategory(), contextSufficient));
+                   chunkRelevant, latency, tokens,
+                   q.getDifficulty(), q.getCategory(), contextSufficient,
+                   false, 0.0));
 
             totalPrecision += precision;
             totalRecall += recall;
@@ -161,8 +170,73 @@ public class EvaluationService {
             recallByDifficulty,
             totalPrecisionAt1 / n,
             chunkRelevanceRate,
-            contextSufficiencyRate    
+            contextSufficiencyRate,
+            0.0,   
+            0.0    
         );
+    }
+
+    public EvaluationReport evaluateLlm() throws Exception {
+        List<EvalQuery> queries = loadQueries("eval_queries_llm.json");
+        List<EvalResult> results = new ArrayList<>();
+
+        int groundedCount = 0, groundedApplicable = 0;
+        double totalEfficiency = 0; int effCount = 0;
+
+        for (EvalQuery q : queries) {
+            long start = System.currentTimeMillis();
+            Map<String, Object> res = ragService.ask(q.getQuery(), null);
+            long latency = System.currentTimeMillis() - start;
+
+            String answer = String.valueOf(res.getOrDefault("answer", ""));
+            String ctx = String.valueOf(res.getOrDefault("contextText", "")).toLowerCase();
+
+            Boolean grounded = null;
+            if (q.getExpectedFacts() != null && !q.getExpectedFacts().isEmpty()) {
+                grounded = q.getExpectedFacts().stream()
+                    .allMatch(f -> answer.toLowerCase().contains(f.toLowerCase()));
+                groundedApplicable++;
+                if (grounded) groundedCount++;
+            }
+
+            int allocatedData = ((Number) res.getOrDefault("dataTokens", 0)).intValue();
+            int allocatedChunk = ((Number) res.getOrDefault("chunkTokens", 0)).intValue();
+            int allocated = allocatedData + allocatedChunk;
+            int cited = 0;
+            List<Map<String,Object>> sources = (List<Map<String,Object>>) res.getOrDefault("sources", List.of());
+            Set<String> answerWords = Arrays.stream(answer.toLowerCase().split("\\W+"))
+                .filter(w -> w.length() > 4).collect(Collectors.toSet());
+            for (Map<String,Object> s : sources) {
+                String text = String.valueOf(s.getOrDefault("chunk_text", ""));
+                if (text.isEmpty()) continue;
+                Set<String> srcWords = Arrays.stream(text.toLowerCase().split("\\W+"))
+                    .filter(w -> w.length() > 4).collect(Collectors.toSet());
+                if (srcWords.isEmpty()) continue;
+                long overlap = srcWords.stream().filter(answerWords::contains).count();
+                double ratio = (double) overlap / srcWords.size();
+                if (ratio > 0.30) {                       
+                    cited += tokenCounter.countForProvider(text);
+                }
+            }
+            double efficiency = allocated == 0 ? 0.0 : Math.min(1.0, (double) cited / allocated);
+            totalEfficiency += efficiency; effCount++;
+
+            results.add(new EvalResult(q.getQuery(), 0, 0, false, false,
+                       false, latency, 0, q.getDifficulty(), q.getCategory(),
+                       false, grounded != null && grounded, efficiency));
+        }
+
+        int n = queries.size();
+        double groundingRate = groundedApplicable == 0 ? 0.0
+            : groundedCount * 100.0 / groundedApplicable;
+        double avgEfficiency = effCount == 0 ? 0.0 : totalEfficiency / effCount;
+
+        System.out.printf("Grounding: %d/%d applicable = %.1f%%%n",
+    groundedCount, groundedApplicable, groundingRate);
+        return new EvaluationReport(
+            0, 0, 0, 0, 0, 0, results,
+            Map.of(), Map.of(), 0, 0, 0,
+            groundingRate, avgEfficiency);
     }
 
     private double computePrecision(List<Integer> retrieved, List<Integer> expected) {
@@ -176,5 +250,17 @@ public class EvaluationService {
     private double computePrecisionAt1(List<Integer> retrieved, List<Integer> expected) {
         if (retrieved.isEmpty() || expected.isEmpty()) return 0;
         return expected.contains(retrieved.get(0)) ? 1.0 : 0.0;
+    }
+
+    public static List<String> extractNumbers(String answer) {
+        return answer.chars()
+            .filter(Character::isDigit)
+            .mapToObj(c -> String.valueOf(c))
+            .collect(Collectors.toList());
+    }
+
+    public static boolean isGrounded(String answer, List<String> expectedFacts) {
+        return expectedFacts == null || expectedFacts.isEmpty()
+            || expectedFacts.stream().allMatch(f -> answer.contains(f));
     }
 }

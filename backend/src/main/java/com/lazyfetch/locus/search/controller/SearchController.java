@@ -367,4 +367,9 @@ public class SearchController {
         return luceneChunkService.search(q, 10, List.of(code));
     }
 
+    @GetMapping("/eval/llm")
+    public EvaluationReport runLlmEval() throws Exception {
+        return evaluationService.evaluateLlm();
+    }
+
 }

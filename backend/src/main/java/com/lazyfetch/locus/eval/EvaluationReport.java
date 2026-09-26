@@ -16,6 +16,8 @@ public class EvaluationReport {
     private final double avgPrecisionAt1;
     private final double chunkRelevanceRate;
     private final double contextSufficiencyRate;
+    private final double answerGroundingRate;
+    private final double avgSourceEfficiency;
 
     public EvaluationReport(
         double avgPrecision,
@@ -27,7 +29,8 @@ public class EvaluationReport {
         List<EvalResult> results,
         Map<String, Double> precisionByCategory,
         Map<String, Double> recallByDifficulty,
-        double avgPrecisionAt1, double chunkRelevanceRate, double contextSufficiencyRate) {
+        double avgPrecisionAt1, double chunkRelevanceRate, double contextSufficiencyRate,
+        double answerGroundingRate, double avgSourceEfficiency) {
         this.avgPrecision = avgPrecision;
         this.avgRecall = avgRecall;
         this.intentAccuracy = intentAccuracy;
@@ -40,6 +43,8 @@ public class EvaluationReport {
         this.avgPrecisionAt1 = avgPrecisionAt1;
         this.chunkRelevanceRate = chunkRelevanceRate;
         this.contextSufficiencyRate = contextSufficiencyRate;
+        this.answerGroundingRate = answerGroundingRate;
+        this.avgSourceEfficiency = avgSourceEfficiency;
     }
 
 
@@ -55,4 +60,6 @@ public class EvaluationReport {
     public double getAvgPrecisionAt1() { return avgPrecisionAt1; }
     public double getChunkRelevanceRate() { return chunkRelevanceRate; }
     public double getContextSufficiencyRate() { return contextSufficiencyRate; }
+    public double getAnswerGroundingRate() { return answerGroundingRate; }
+    public double getAvgSourceEfficiency() { return avgSourceEfficiency; }
 }

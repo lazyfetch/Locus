@@ -8,6 +8,8 @@ import com.lazyfetch.locus.search.dto.HybridSearchResponse;
 import com.lazyfetch.locus.search.hybrid.HybridSearchService;
 import com.lazyfetch.locus.search.llm.LlmClient;
 import com.lazyfetch.locus.search.llm.LlmResponse;
+import com.lazyfetch.locus.search.tokens.TokenCounter;
+
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -24,6 +26,7 @@ public class RagService
     private final ConversationService conversationService;
     private final MemoryManager memoryManager;
     private final LlmClient llmClient;
+    private final TokenCounter tokenCounter;
 
     public RagService(
             HybridSearchService hybridSearchService,
@@ -32,7 +35,8 @@ public class RagService
             ContextAssembler contextAssembler,
             ConversationService conversationService,
             MemoryManager memoryManager,
-            LlmClient llmClient) {
+            LlmClient llmClient,
+            TokenCounter tokenCounter) {
         this.hybridSearchService = hybridSearchService;
         this.budgetAllocator = budgetAllocator;
         this.contextCompressor = contextCompressor;
@@ -40,6 +44,7 @@ public class RagService
         this.conversationService = conversationService;
         this.memoryManager = memoryManager;
         this.llmClient = llmClient;
+        this.tokenCounter = tokenCounter;
     }
 
     public Map<String, Object> ask(String question, String conversationId) throws Exception 
@@ -96,8 +101,21 @@ public class RagService
         result.put("conversationId", conversationId);
         result.put("tokensUsed", llmResponse.getTotalTokens());
         result.put("sources", searchResults.getUnstructured().stream()
-            .map(c -> Map.of("section_type", c.get("section_type"), "chunk_text", c.get("chunk_text")))
+            .map(c -> Map.of(
+                "section_type", String.valueOf(c.getOrDefault("section_type", "")),
+                "chunk_text", String.valueOf(c.getOrDefault("chunk_text_full",
+                       c.getOrDefault("chunk_text", "")))))
             .collect(Collectors.toList()));
+        result.put("contextText", prompt);                    
+        String renderedData = compressedData.toString();
+        String renderedChunks = compressedChunks.toString();
+        result.put("dataTokens", tokenCounter.countForProvider(renderedData));
+        result.put("chunkTokens", tokenCounter.countForProvider(renderedChunks));
+        result.put("allocatedDataTokens", allocation.getDataTokens());
+        result.put("allocatedChunkTokens", allocation.getChunkTokens());
+        
+        int allocatedData = ((Number) result.getOrDefault("dataTokens", 0)).intValue();
+        int allocatedChunk = ((Number) result.getOrDefault("chunkTokens", 0)).intValue();
         
         return result;
     }
