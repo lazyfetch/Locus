@@ -5,31 +5,43 @@ import ConversationSidebar from '../components/ConversationSidebar';
 import MessageList from '../components/MessageList';
 import MessageInput from '../components/MessageInput';
 import ContextPanel from '../components/ContextPanel';
-import { WELCOME_MESSAGE } from '../data/mockData';
 import { useAuth } from '../context/AuthContext';
 import './ChatPage.css';
 
-const STORAGE_KEY = 'locus-conversations';
 const DEFAULT_TITLE = 'New Chat';
 const TOKEN_TOTAL = 6000;
+
+function conversationStorageKey(email: string): string {
+  return `locus-conversations:${encodeURIComponent(email.toLowerCase())}`;
+}
 
 function generateId(): string {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
 }
 
-function loadConversations(): Conversation[] {
+function loadConversations(storageKey: string): Conversation[] {
   try {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) return JSON.parse(stored) as Conversation[];
+    const stored = localStorage.getItem(storageKey);
+    if (stored) {
+      const conversations = JSON.parse(stored) as Conversation[];
+      return conversations.map((conversation) => {
+        const onlyWelcome = conversation.messages.length === 1
+          && conversation.messages[0]?.role === 'assistant'
+          && conversation.messages[0]?.content.includes("Hello! I'm **Locus AI**");
+        return onlyWelcome
+          ? { ...conversation, messages: [], tokenUsed: 0 }
+          : conversation;
+      });
+    }
   } catch {
  
   }
   return [];
 }
 
-function saveConversations(conversations: Conversation[]): void {
+function saveConversations(storageKey: string, conversations: Conversation[]): void {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(conversations));
+    localStorage.setItem(storageKey, JSON.stringify(conversations));
   } catch {
   }
 }
@@ -38,8 +50,8 @@ function createConversation(): Conversation {
   return {
     id: generateId(),
     title: DEFAULT_TITLE,
-    messages: [WELCOME_MESSAGE],
-    tokenUsed: 1200,
+    messages: [],
+    tokenUsed: 0,
     createdAt: Date.now(),
   };
 }
@@ -58,9 +70,10 @@ function deriveTitle(messages: Message[]): string {
 }
 
 export default function ChatPage() {
-  const { authorizedFetch } = useAuth();
+  const { authorizedFetch, user } = useAuth();
+  const storageKey = conversationStorageKey(user?.email || 'anonymous');
   const [conversations, setConversations] = useState<Conversation[]>(() => {
-    const loaded = loadConversations();
+    const loaded = loadConversations(storageKey);
     return loaded.length > 0 ? loaded : [createConversation()];
   });
   const [activeId, setActiveId] = useState<string>(conversations[0]?.id || '');
@@ -69,8 +82,8 @@ export default function ChatPage() {
   const [isTyping, setIsTyping] = useState(false);
 
   useEffect(() => {
-    saveConversations(conversations);
-  }, [conversations]);
+    saveConversations(storageKey, conversations);
+  }, [conversations, storageKey]);
 
   const activeConversation = conversations.find((c) => c.id === activeId) || conversations[0];
   const messages = activeConversation?.messages || [];
