@@ -5,6 +5,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -21,14 +22,20 @@ public class AuthService {
     private final RefreshTokenRepository refreshTokens;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final boolean secureCookie;
+    private final String sameSite;
     private final SecureRandom random = new SecureRandom();
 
     public AuthService(AuthUserRepository users, RefreshTokenRepository refreshTokens,
-                       PasswordEncoder passwordEncoder, JwtService jwtService) {
+                       PasswordEncoder passwordEncoder, JwtService jwtService,
+                       @Value("${app.cookie-secure:false}") boolean secureCookie,
+                       @Value("${app.cookie-same-site:Lax}") String sameSite) {
         this.users = users;
         this.refreshTokens = refreshTokens;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
+        this.secureCookie = secureCookie;
+        this.sameSite = sameSite;
     }
 
     @Transactional
@@ -97,13 +104,13 @@ public class AuthService {
     }
 
     public ResponseCookie clearRefreshCookie() {
-        return ResponseCookie.from(REFRESH_COOKIE, "").httpOnly(true).secure(false)
-                .sameSite("Lax").path("/").maxAge(Duration.ZERO).build();
+        return ResponseCookie.from(REFRESH_COOKIE, "").httpOnly(true).secure(secureCookie)
+            .sameSite(sameSite).path("/").maxAge(Duration.ZERO).build();
     }
 
     private ResponseCookie refreshCookie(String raw) {
-        return ResponseCookie.from(REFRESH_COOKIE, raw).httpOnly(true).secure(false)
-                .sameSite("Lax").path("/").maxAge(Duration.ofDays(30)).build();
+        return ResponseCookie.from(REFRESH_COOKIE, raw).httpOnly(true).secure(secureCookie)
+            .sameSite(sameSite).path("/").maxAge(Duration.ofDays(30)).build();
     }
 
     public Map<String, Object> userView(AuthUser user) {

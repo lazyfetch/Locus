@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { API_BASE_URL } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import './LoginPage.css';
 
@@ -59,7 +60,7 @@ export default function LoginPage() {
         <div className="login-page__logo">Locus</div>
         <p className="login-page__tagline">Financial Intelligence Assistant</p>
 
-        <a className="login-page__google" href="/oauth2/authorization/google">
+        <a className="login-page__google" href={`${API_BASE_URL}/oauth2/authorization/google`}>
           <span className="login-page__google-mark">G</span>
           Continue with Google
         </a>

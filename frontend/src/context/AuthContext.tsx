@@ -4,11 +4,16 @@ import type { UserProfile, AuthContextType } from '../types';
 const AuthContext = createContext<AuthContextType | null>(null);
 
 const ACCESS_TOKEN_KEY = 'locus-access-token';
+export const API_BASE_URL = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
+
+export function apiUrl(path: string): string {
+  return `${API_BASE_URL}${path}`;
+}
 
 type AuthResponse = { accessToken: string; user: { id: string; name: string; email: string } };
 
 async function request(path: string, init: RequestInit = {}): Promise<Response> {
-  return fetch(path, { ...init, credentials: 'include', headers: { 'Content-Type': 'application/json', ...(init.headers || {}) } });
+  return fetch(apiUrl(path), { ...init, credentials: 'include', headers: { 'Content-Type': 'application/json', ...(init.headers || {}) } });
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -64,13 +69,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const token = sessionStorage.getItem(ACCESS_TOKEN_KEY);
     if (token) headers.set('Authorization', `Bearer ${token}`);
     headers.set('Content-Type', 'application/json');
-    let response = await fetch(input, { ...init, headers, credentials: 'include' });
+    const target = typeof input === 'string' ? apiUrl(input) : input;
+    let response = await fetch(target, { ...init, headers, credentials: 'include' });
     if (response.status === 401 && await refresh()) {
       const retryHeaders = new Headers(init.headers);
       const refreshedToken = sessionStorage.getItem(ACCESS_TOKEN_KEY);
       if (refreshedToken) retryHeaders.set('Authorization', `Bearer ${refreshedToken}`);
       retryHeaders.set('Content-Type', 'application/json');
-      response = await fetch(input, { ...init, headers: retryHeaders, credentials: 'include' });
+      response = await fetch(target, { ...init, headers: retryHeaders, credentials: 'include' });
     }
     return response;
   }, [refresh]);
