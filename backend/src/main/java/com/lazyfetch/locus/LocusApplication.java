@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 @SpringBootApplication
-@EntityScan("com.lazyfetch.locus.data.mf.entity")
+@EntityScan({"com.lazyfetch.locus.data.mf.entity", "com.lazyfetch.locus.auth"})
 public class LocusApplication {
 
 	public static void main(String[] args) {

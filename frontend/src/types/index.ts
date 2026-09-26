@@ -41,9 +41,11 @@ export type Theme = 'light' | 'dark';
 
 export interface AuthContextType {
   user: UserProfile | null;
-  login: (email: string, password: string) => boolean;
-  signup: (name: string, email: string, password: string) => boolean;
-  logout: () => void;
+  loading: boolean;
+  login: (email: string, password: string) => Promise<void>;
+  signup: (name: string, email: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
+  authorizedFetch: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
 }
 
 export interface ThemeContextType {

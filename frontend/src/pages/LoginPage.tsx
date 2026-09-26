@@ -5,7 +5,7 @@ import { useTheme } from '../context/ThemeContext';
 import './LoginPage.css';
 
 export default function LoginPage() {
-  const { login, signup } = useAuth();
+  const { login, signup, loading } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
 
@@ -15,21 +15,16 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
-    let success: boolean;
-    if (isLogin) {
-      success = login(email, password);
-    } else {
-      success = signup(name, email, password);
-    }
-
-    if (success) {
+    try {
+      if (isLogin) await login(email, password);
+      else await signup(name, email, password);
       navigate('/chat', { replace: true });
-    } else {
-      setError('Please fill in all fields.');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unable to authenticate');
     }
   };
 
@@ -63,6 +58,13 @@ export default function LoginPage() {
       <div className="login-page__card">
         <div className="login-page__logo">Locus</div>
         <p className="login-page__tagline">Financial Intelligence Assistant</p>
+
+        <a className="login-page__google" href="/oauth2/authorization/google">
+          <span className="login-page__google-mark">G</span>
+          Continue with Google
+        </a>
+
+        <div className="login-page__or"><span>or</span></div>
 
         <form className="login-page__form" onSubmit={handleSubmit}>
           {!isLogin && (
@@ -108,7 +110,7 @@ export default function LoginPage() {
 
           {error && <p className="login-page__error">{error}</p>}
 
-          <button type="submit" className="login-page__submit">
+          <button type="submit" className="login-page__submit" disabled={loading}>
             {isLogin ? 'Sign In' : 'Create Account'}
           </button>
         </form>

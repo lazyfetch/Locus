@@ -6,6 +6,7 @@ import MessageList from '../components/MessageList';
 import MessageInput from '../components/MessageInput';
 import ContextPanel from '../components/ContextPanel';
 import { WELCOME_MESSAGE } from '../data/mockData';
+import { useAuth } from '../context/AuthContext';
 import './ChatPage.css';
 
 const STORAGE_KEY = 'locus-conversations';
@@ -57,6 +58,7 @@ function deriveTitle(messages: Message[]): string {
 }
 
 export default function ChatPage() {
+  const { authorizedFetch } = useAuth();
   const [conversations, setConversations] = useState<Conversation[]>(() => {
     const loaded = loadConversations();
     return loaded.length > 0 ? loaded : [createConversation()];
@@ -132,7 +134,7 @@ export default function ChatPage() {
     setIsTyping(true);
 
     try {
-      const res = await fetch('/api/ask', {
+      const res = await authorizedFetch('/api/ask', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -182,7 +184,7 @@ export default function ChatPage() {
     } finally {
       setIsTyping(false);
     }
-  }, [activeId, updateConversation]);
+  }, [activeId, authorizedFetch, updateConversation]);
 
   const toggleSidebar = useCallback(() => {
     setSidebarCollapsed((prev) => !prev);
