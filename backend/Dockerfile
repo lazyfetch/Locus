@@ -33,4 +33,4 @@ RUN curl -fL -o /app/models/ner/labels.json \
     "https://huggingface.co/runt1merr0r07/LocusNER/resolve/main/labels.json"
 
 EXPOSE 8081
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-Xmx320m", "-XX:MaxMetaspaceSize=128m", "-jar", "app.jar"]
