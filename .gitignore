@@ -44,6 +44,11 @@ build/
 models/
 *.onnx
 
+# Runtime models for deployment
+!backend/models/
+!backend/models/all-MiniLM-L6-v2.onnx
+!backend/models/tokenizer.json
+
 frontend/logs
 frontend/*.log
 frontend/npm-debug.log*
