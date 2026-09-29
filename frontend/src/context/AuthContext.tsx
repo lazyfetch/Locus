@@ -26,18 +26,33 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const refresh = useCallback(async (): Promise<boolean> => {
-    const response = await request('/api/auth/refresh', { method: 'POST' });
-    if (!response.ok) {
+    try {
+      const response = await request('/api/auth/refresh', { method: 'POST' });
+      if (!response.ok) {
+        sessionStorage.removeItem(ACCESS_TOKEN_KEY);
+        setUser(null);
+        return false;
+      }
+      applyAuth(await response.json() as AuthResponse);
+      return true;
+    } catch {
       sessionStorage.removeItem(ACCESS_TOKEN_KEY);
       setUser(null);
       return false;
     }
-    applyAuth(await response.json() as AuthResponse);
-    return true;
   }, [applyAuth]);
 
   useEffect(() => {
-    refresh().finally(() => setLoading(false));
+    const params = new URLSearchParams(window.location.search);
+    const isOAuthReturn = params.get('oauth') === 'success';
+    refresh().finally(() => {
+      setLoading(false);
+      if (isOAuthReturn) {
+        params.delete('oauth');
+        const query = params.toString();
+        window.history.replaceState({}, '', window.location.pathname + (query ? `?${query}` : ''));
+      }
+    });
   }, [refresh]);
 
   const login = useCallback(async (email: string, password: string) => {
