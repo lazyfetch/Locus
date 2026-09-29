@@ -1,13 +1,12 @@
 # Locus — Hybrid Retrieval & Context Assembly Engine
 
-**Locus** (formerly *HyReCE*) is a domain-specific retrieval and context-assembly
+**Locus** is a domain-specific retrieval and context-assembly
 platform for Indian mutual funds. It fuses three retrieval strategies — dense
 vector search, sparse keyword search, and structured SQL lookup — into a single
 ranked result set, then assembles the retrieved material into a token-budgeted
 prompt for a large language model.
 
-The project is a retrieval-infrastructure exercise, not a thin wrapper around an
-LLM. Its central engineering question is:
+The project is a retrieval-infrastructure exercise. Its central engineering question is:
 
 > Given a finite LLM context window, how do you select, compress, and format the
 > most relevant information — across heterogeneous sources and conversation
