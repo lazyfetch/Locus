@@ -9,3 +9,5 @@ steps:
       - 'backend'
 images:
   - 'gcr.io/$PROJECT_ID/locus-backend'
+options:
+  logging: CLOUD_LOGGING_ONLY
