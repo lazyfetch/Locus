@@ -1,4 +1,4 @@
-# Locus — Hybrid Retrieval & Context Assembly Engine
+# Locus — Context Optimisation and Retrieval Engine
 
 **Locus** is a domain-specific retrieval and context-assembly
 platform for Indian mutual funds. It fuses three retrieval strategies — dense
